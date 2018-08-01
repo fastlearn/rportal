@@ -17,7 +17,7 @@ public interface ConfigMapper {
 
     boolean save(Config config);
 
-    boolean updateConfig(List<Config> configs);
+    boolean update(@Param("config")Config config);
 
-    List<Config> listConfig(@Param("names") String[] names);
+    List<Config> listConfig(@Param("names") String... names);
 }

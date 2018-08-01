@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ConfigService {
 
-    List<Config> listConfig(String[] names);
+    List<Config> listConfig(String... names);
 
     boolean updateConfig(List<Config> configs);
 }

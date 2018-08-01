@@ -27,8 +27,7 @@ public class RportalController {
 
     @GetMapping(value = {"", "/", "index", "home"})
     public String index(Model model) {
-        String[] names = {"title", "index"};
-        List<Config> configs = configService.listConfig(names);
+        List<Config> configs = configService.listConfig("siteName", "indexUrl");
         configs.forEach(config -> model.addAttribute(config.getName(), config.getValue()));
         return "index";
     }

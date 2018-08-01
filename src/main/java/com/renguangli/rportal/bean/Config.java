@@ -20,6 +20,11 @@ public class Config implements Serializable{
 
     public Config() {}
 
+    public Config(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public Config(Integer id, String name, String value) {
         this.id = id;
         this.name = name;

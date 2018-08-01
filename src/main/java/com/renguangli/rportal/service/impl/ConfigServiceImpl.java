@@ -25,12 +25,13 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public List<Config> listConfig(String[] names) {
+    public List<Config> listConfig(String... names) {
         return configMapper.listConfig(names);
     }
 
     @Override
     public boolean updateConfig(List<Config> configs) {
-        return configMapper.updateConfig(configs);
+        configs.forEach(configMapper::update);
+        return true;
     }
 }
