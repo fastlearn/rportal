@@ -1,8 +1,13 @@
 package com.renguangli.rportal.controller;
 
+import com.renguangli.rportal.bean.Config;
+import com.renguangli.rportal.service.ConfigService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 /**
  * RportalController
@@ -13,13 +18,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class RportalController {
 
+    private final ConfigService configService;
+
+    @Autowired
+    public RportalController(ConfigService configService) {
+        this.configService = configService;
+    }
+
     @GetMapping(value = {"", "/", "index", "home"})
     public String index(Model model) {
-        String title = "后台管理系统";
-        String index = "https://www.baidu.com";
-
-        model.addAttribute("title", title);
-        model.addAttribute("index", index);
+        String[] names = {"title", "index"};
+        List<Config> configs = configService.listConfig(names);
+        configs.forEach(config -> model.addAttribute(config.getName(), config.getValue()));
         return "index";
     }
 }
