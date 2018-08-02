@@ -3,6 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.renguangli.rportal.mapper.ConfigMapper">
 
+    <!-- 开启mybatis二级缓存 -->
+    <cache></cache>
+
     <sql id="table_name">rportal_config</sql>
 
     <select id="listConfig" resultType="Config">
