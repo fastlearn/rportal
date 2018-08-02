@@ -10,6 +10,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,12 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        String username = (String)principals.getPrimaryPrincipal();
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        authorizationInfo.setRoles(userService.listRoles(username));
+        //authorizationInfo.setStringPermissions(userService.findPermissions(username));
+        System.out.println("sss" + userService.listRoles(username));
+        return authorizationInfo;
     }
 
     @Override
@@ -55,7 +61,7 @@ public class ShiroRealm extends AuthorizingRealm {
     /**
      * 构造shiro过滤链配置
      */
-    protected Map<String,String> doGetFilterChainDefinitionMap(){
+    Map<String,String> doGetFilterChainDefinitionMap(){
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 从数据库获取url权限配置
         List<Permission> permissions = permissionService.listPermission();
@@ -66,6 +72,8 @@ public class ShiroRealm extends AuthorizingRealm {
         filterChainDefinitionMap.put("/static/**", "anon");
         //配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put("/", "user");
+        filterChainDefinitionMap.put("/dashboard", "authc,roles[admin]");
         filterChainDefinitionMap.put("/**", "authc");
         return filterChainDefinitionMap;
     }

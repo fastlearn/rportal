@@ -14,4 +14,12 @@
         where username = #{username}
     </select>
 
+    <select id="listRoles" resultType="String">
+        select r.role_code
+        from <include refid="table_name" /> u
+          left join rportal_user_role ur on u.user_id = ur.role_id
+          left join rportal_role r on ur.role_id = r.role_id
+        where u.username = #{username}
+    </select>
+
 </mapper>

@@ -3,6 +3,8 @@ package com.renguangli.rportal.service;
 import com.renguangli.rportal.bean.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Set;
+
 /**
  * UserService
  *
@@ -12,4 +14,6 @@ import org.apache.ibatis.annotations.Param;
 public interface UserService {
 
     String login(String username);
+
+    Set<String> listRoles(String username);
 }

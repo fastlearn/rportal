@@ -3,6 +3,8 @@ package com.renguangli.rportal.mapper;
 import com.renguangli.rportal.bean.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Set;
+
 /**
  * UserMapper
  *
@@ -12,4 +14,6 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper {
 
     String login(@Param("username") String username);
+
+    Set<String> listRoles(@Param("username") String username);
 }

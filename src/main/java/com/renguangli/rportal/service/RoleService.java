@@ -1,5 +1,7 @@
 package com.renguangli.rportal.service;
 
+import java.util.Set;
+
 /**
  * RoleService
  *
@@ -7,4 +9,6 @@ package com.renguangli.rportal.service;
  * @since JDK 1.8
  */
 public interface RoleService {
+
+    Set<String> listRoles(String username);
 }
