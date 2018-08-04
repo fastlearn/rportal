@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>权限管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/lib/admin.css}" media="all">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">全部消息</li>
+                <li>通知<span class="layui-badge">6</span></li>
+                <li>私信</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">标记已读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="readyAll">全部已读</button>
+                    </div>
+                    <table id="permission" lay-filter="test"></table>
+                </div>
+                <div class="layui-tab-item">
+
+                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="ready">标记已读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="readyAll">全部已读</button>
+                    </div>
+
+                    <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/static/layui/layui.js}"></script>
+<script th:inline="javascript">
+var ctx = /*[[@{/}]]*/ "";
+layui.use(['table', "element", "jquery"], function(){
+    var $ = layui.jquery;
+    var table = layui.table;
+    var cols = [
+        {type:'checkbox'},
+        {"field": "permissionId", "title": "ID", align: "center", width: 50},
+        {"field": "url", "title": "URL资源", width: 150},
+        {"field": "permission", "title": "权限"},
+        {"field": "update", "title": "操作", toolbar: '#toolbar'}
+    ];
+    table.render({
+        elem: '#permission',
+        url: ctx + "/permissions",
+        where: {}, //设定异步数据接口的额外参数
+        text: "-",
+        done: function(res, curr, count){
+
+        },
+        page: true,
+        cols: [cols]
+    });
+
+    table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+        if(layEvent === 'detail'){ //查看
+            //do somehing
+        } else if(layEvent === 'del'){ //删除
+            layer.confirm('真的删除行么', function(index){
+                alert(obj.data.permissionId)
+                $.ajax({//异步请求返回给后台
+                    url:ctx + "/permission?permissionId=" + obj.data.permissionId,
+                    type:'DELETE',
+                    dataType:'json',
+                    success:function(data){
+                        if (data) {
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            layer.msg("删除成功！")
+                        } else {
+                            layer.msg("删除失败，该数据不存在或已删除！")
+                        }
+                    },
+                    error() {
+                        layer.msg("后台接口接异常，删除失败！")
+                    }
+                });
+            });
+        } else if(layEvent === 'edit'){ //编辑
+            //do something
+
+            //同步更新缓存对应的值
+            obj.update({
+                username: '123'
+                ,title: 'xxx'
+            });
+        }
+    });
+});
+</script>
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">赋权</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.permissionId == 3){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="edit">赋权</a>
+    {{#  } }}
+</script>
+</body>
+</html>
+
+

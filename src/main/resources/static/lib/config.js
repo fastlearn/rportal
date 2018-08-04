@@ -37,13 +37,6 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
       ,msgName: 'msg' //状态信息的字段名称
       ,dataName: 'data' //数据详情的字段名称
     }
-    
-    //扩展的第三方模块
-    ,extend: [
-      'echarts', //echarts 核心包
-      'echartsTheme' //echarts 主题
-    ]
-    
     //主题配置
     ,theme: {
       //内置主题配色方案

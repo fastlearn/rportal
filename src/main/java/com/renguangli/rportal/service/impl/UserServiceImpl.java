@@ -1,7 +1,6 @@
 package com.renguangli.rportal.service.impl;
 
 import com.renguangli.rportal.bean.User;
-import com.renguangli.rportal.mapper.RoleMapper;
 import com.renguangli.rportal.mapper.UserMapper;
 import com.renguangli.rportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +25,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(String username) {
-        return userMapper.login(username);
+    public User getUser(User user) {
+        return userMapper.getUser(user);
     }
 
     @Override
-    public Set<String> listRoles(String username) {
-        return userMapper.listRoles(username);
+    public Set<String> listRole(String username) {
+        return userMapper.listRole(username);
     }
+
+    @Override
+    public Set<String> listUrl(String username) {
+        return userMapper.listUrl(username);
+    }
+
+
 }

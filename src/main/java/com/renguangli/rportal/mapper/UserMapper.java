@@ -13,7 +13,9 @@ import java.util.Set;
  */
 public interface UserMapper {
 
-    String login(@Param("username") String username);
+    User getUser(@Param("user")User user);
 
-    Set<String> listRoles(@Param("username") String username);
+    Set<String> listRole(@Param("username") String username);
+
+    Set<String> listUrl(@Param("username") String username);
 }

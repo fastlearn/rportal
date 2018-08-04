@@ -12,17 +12,13 @@ public class Permission {
 
     private String url;
 
-    private String roles;
-
-    private String permissions;
+    private String permission;
 
     public Permission() {}
 
-    public Permission(Integer permissionId, String url, String roles, String permissions) {
+    public Permission(Integer permissionId, String url) {
         this.permissionId = permissionId;
         this.url = url;
-        this.roles = roles;
-        this.permissions = permissions;
     }
 
     public Integer getPermissionId() {
@@ -41,30 +37,20 @@ public class Permission {
         this.url = url;
     }
 
-    public String getRoles() {
-        return roles;
+    public String getPermission() {
+        return permission;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
-    public String getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(String permissions) {
-        this.permissions = permissions;
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 
     @Override
     public String toString() {
         return "Permission{" +
                 "permissionId=" + permissionId +
-                ", url=" + url +
-                ", roles=" + roles +
-                ", permissions=" + permissions +
-                "}";
+                ", url='" + url + '\'' +
+                ", permission='" + permission + '\'' +
+                '}';
     }
-
 }

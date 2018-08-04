@@ -3,22 +3,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.renguangli.rportal.mapper.UserMapper">
 
-    <!-- 开启mybatis二级缓存 -->
-    <cache></cache>
-
     <sql id="table_name">rportal_user</sql>
 
-    <select id="login" resultType="String">
-        select password
+    <select id="getUser" resultType="User">
+        select user_id userId,username,password
         from <include refid="table_name" />
-        where username = #{username}
+        where 1=1
+        <if test="user.username != null and user.username != ''">
+            and username = #{user.username}
+        </if>
     </select>
 
-    <select id="listRoles" resultType="String">
+    <select id="listRole" resultType="String">
         select r.role_code
         from <include refid="table_name" /> u
-          left join rportal_user_role ur on u.user_id = ur.role_id
-          left join rportal_role r on ur.role_id = r.role_id
+          left join rportal_user_role ur on ur.user_id = u.user_id
+          left join rportal_role r on r.role_id = ur.role_id
+        where u.username = #{username}
+    </select>
+
+    <select id="listUrl" resultType="String">
+        select p.url
+        from <include refid="table_name" /> u
+          left join rportal_user_permission up on up.user_id = u.user_id
+          left join rportal_permission p on p.permission_id = up.permission_id
         where u.username = #{username}
     </select>
 

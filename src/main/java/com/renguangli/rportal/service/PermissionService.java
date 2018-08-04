@@ -12,10 +12,9 @@ import java.util.List;
  */
 public interface PermissionService {
 
-    /**
-     * 获取所有permission
-     * @return List<Permission>
-     */
-    List<Permission> listPermission();
+    List<Permission> listPermission(Permission permission);
 
+    boolean savePermission(Permission permission);
+
+    boolean deletePermission(Permission permission);
 }

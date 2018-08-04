@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.renguangli.rportal.mapper.PermissionMapper">
+
+    <sql id="table_name">rportal_permission</sql>
+
+    <select id="listPermission" resultType="Permission">
+        select permission_id permissionId,url,permission
+        from <include refid="table_name" />
+        where 1=1
+        <if test="permission != null and permission.url">
+          and url = #{permission.url}
+        </if>
+        order by sort
+    </select>
+
+    <insert id="savePermission">
+        insert into <include refid="table_name" />
+          (url,permission)
+        values
+          (#{permission.url},#{permission.permission})
+    </insert>
+
+    <insert id="deletePermission">
+        delete from <include refid="table_name" />
+        where permission_id = #{permission.permissionId}
+    </insert>
+
+</mapper>

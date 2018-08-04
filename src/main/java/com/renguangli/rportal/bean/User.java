@@ -29,6 +29,10 @@ public class User implements Serializable{
 
     public User() {}
 
+    public User(String username) {
+        this.username = username;
+    }
+
     public User(Integer userId, String username, String password, String phoneNumber, String email, Date createDatetime, Date updateDatetime) {
         this.userId = userId;
         this.username = username;
