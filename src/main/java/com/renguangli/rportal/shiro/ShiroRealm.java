@@ -1,7 +1,9 @@
 package com.renguangli.rportal.shiro;
 
 import com.renguangli.rportal.bean.Permission;
+import com.renguangli.rportal.bean.User;
 import com.renguangli.rportal.service.PermissionService;
+import com.renguangli.rportal.service.ShiroService;
 import com.renguangli.rportal.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -30,18 +32,14 @@ import java.util.Map;
 public class ShiroRealm extends AuthorizingRealm {
 
     @Resource
-    private PermissionService permissionService;
-
-    @Resource
     private UserService userService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = (String)principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(userService.listRoles(username));
-        //authorizationInfo.setStringPermissions(userService.findPermissions(username));
-        System.out.println("sss" + userService.listRoles(username));
+        authorizationInfo.setRoles(userService.listRole(username));
+        authorizationInfo.setStringPermissions(userService.listUrl(username));
         return authorizationInfo;
     }
 
@@ -49,32 +47,14 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
         String username = token.getUsername();
-        String password = userService.login(username);
-        if (password == null) { //用户不存在
+        User user = new User(username);
+        user = userService.getUser(user);
+        String password = user.getPassword();
+        if (user.getUsername() == null) { //用户不存在
             throw new UnknownAccountException();
         }
         //构造一个用户认证信息并返回，后面会通过这个和token的pwd进行对比。
         return new SimpleAuthenticationInfo(username,password,this.getName());
-
     }
 
-    /**
-     * 构造shiro过滤链配置
-     */
-    Map<String,String> doGetFilterChainDefinitionMap(){
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 从数据库获取url权限配置
-        List<Permission> permissions = permissionService.listPermission();
-       /* for (Permission permission : permissions) {
-            filterChainDefinitionMap.put("url","roles");
-        }*/
-        //配置静态资源不拦截
-        filterChainDefinitionMap.put("/static/**", "anon");
-        //配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/", "user");
-        filterChainDefinitionMap.put("/dashboard", "authc,roles[admin]");
-        filterChainDefinitionMap.put("/**", "authc");
-        return filterChainDefinitionMap;
-    }
 }
