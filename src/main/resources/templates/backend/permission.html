@@ -58,7 +58,7 @@ layui.use(['table', "element", "jquery"], function(){
     ];
     table.render({
         elem: '#permission',
-        url: ctx + "/permissions",
+        url: ctx + "permissions",
         where: {}, //设定异步数据接口的额外参数
         text: "-",
         done: function(res, curr, count){
@@ -79,7 +79,7 @@ layui.use(['table', "element", "jquery"], function(){
             layer.confirm('真的删除行么', function(index){
                 alert(obj.data.permissionId)
                 $.ajax({//异步请求返回给后台
-                    url:ctx + "/permission?permissionId=" + obj.data.permissionId,
+                    url:ctx + "permission?permissionId=" + obj.data.permissionId,
                     type:'DELETE',
                     dataType:'json',
                     success:function(data){

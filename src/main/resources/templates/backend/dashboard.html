@@ -35,7 +35,7 @@ layui.use(['jquery'], function(){
     setInterval(function () {
         $.ajax({
             type: "GET",
-            url: ctx + "/monitor",
+            url: ctx + "monitor",
             dataType: "json",
             success: function(data){
                 var cpu = data.cpu.toFixed(2) + "%";
