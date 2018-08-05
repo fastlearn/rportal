@@ -14,11 +14,18 @@ public class Permission {
 
     private String permission;
 
+    private String description;
+
+    private Integer sort;
+
     public Permission() {}
 
-    public Permission(Integer permissionId, String url) {
+    public Permission(Integer permissionId, String url, String permission, String description, Integer sort) {
         this.permissionId = permissionId;
         this.url = url;
+        this.permission = permission;
+        this.description = description;
+        this.sort = sort;
     }
 
     public Integer getPermissionId() {
@@ -45,12 +52,30 @@ public class Permission {
         this.permission = permission;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     @Override
     public String toString() {
         return "Permission{" +
                 "permissionId=" + permissionId +
                 ", url='" + url + '\'' +
                 ", permission='" + permission + '\'' +
+                ", description='" + description + '\'' +
+                ", sort=" + sort +
                 '}';
     }
 }

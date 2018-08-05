@@ -6,7 +6,7 @@
     <sql id="table_name">rportal_permission</sql>
 
     <select id="listPermission" resultType="Permission">
-        select permission_id permissionId,url,permission
+        select permission_id permissionId,url,permission,description,sort
         from <include refid="table_name" />
         where 1=1
         <if test="permission != null and permission.url">

@@ -66,6 +66,10 @@ public class PageViewController {
             pageViews.put("config", "/backend/config");
             //dashboard页面
             pageViews.put("dashboard", "/backend/dashboard");
+            //用户管理页面
+            pageViews.put("user", "/backend/user");
+            //角色管理页面
+            pageViews.put("role", "/backend/role");
             //权限管理页面
             pageViews.put("permission", "/backend/permission");
         }

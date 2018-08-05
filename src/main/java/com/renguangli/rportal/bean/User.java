@@ -1,7 +1,7 @@
 package com.renguangli.rportal.bean;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User
@@ -19,32 +19,48 @@ public class User implements Serializable{
 
     private String password;
 
+    /**
+     * 账号是否锁定，默认false
+     */
+    private boolean locked;
+
+    /**
+     * 默认90天过期
+     */
+    private Integer expired = 90;
+
+    /**
+     * 用户真实姓名/昵称
+     */
+    private String name;
+
     private String phoneNumber;
 
     private String email;
 
-    private Date createDatetime;
+    /**
+     * 用户创建日期
+     */
+    private LocalDateTime createDatetime;
 
-    private Date updateDatetime;
+    /**
+     * 用户更新日期
+     */
+    private LocalDateTime updateDatetime;
+
+    /**
+     * 密码更新日期
+     */
+    private LocalDateTime passUpdateDatetime;
 
     public User() {}
 
+    public User(Integer userId) {
+        this.userId = userId;
+    }
+
     public User(String username) {
         this.username = username;
-    }
-
-    public User(Integer userId, String username, String password, String phoneNumber, String email, Date createDatetime, Date updateDatetime) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.createDatetime = createDatetime;
-        this.updateDatetime = updateDatetime;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Integer getUserId() {
@@ -71,6 +87,30 @@ public class User implements Serializable{
         this.password = password;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public Integer getExpired() {
+        return expired;
+    }
+
+    public void setExpired(Integer expired) {
+        this.expired = expired;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -87,33 +127,44 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public Date getCreateDatetime() {
+    public LocalDateTime getCreateDatetime() {
         return createDatetime;
     }
 
-    public void setCreateDatetime(Date createDatetime) {
+    public void setCreateDatetime(LocalDateTime createDatetime) {
         this.createDatetime = createDatetime;
     }
 
-    public Date getUpdateDatetime() {
+    public LocalDateTime getUpdateDatetime() {
         return updateDatetime;
     }
 
-    public void setUpdateDatetime(Date updateDatetime) {
+    public void setUpdateDatetime(LocalDateTime updateDatetime) {
         this.updateDatetime = updateDatetime;
+    }
+
+    public LocalDateTime getPassUpdateDatetime() {
+        return passUpdateDatetime;
+    }
+
+    public void setPassUpdateDatetime(LocalDateTime passUpdateDatetime) {
+        this.passUpdateDatetime = passUpdateDatetime;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", username=" + username +
-                ", password=" + password +
-                ", phoneNumber=" + phoneNumber +
-                ", email=" + email +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", locked=" + locked +
+                ", expired=" + expired +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
                 ", createDatetime=" + createDatetime +
                 ", updateDatetime=" + updateDatetime +
-                "}";
+                ", passUpdateDatetime=" + passUpdateDatetime +
+                '}';
     }
-
 }

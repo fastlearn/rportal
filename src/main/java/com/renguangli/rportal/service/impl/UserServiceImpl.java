@@ -6,6 +6,7 @@ import com.renguangli.rportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,6 +31,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> listUser(User user) {
+        return userMapper.listUser(user);
+    }
+
+    @Override
     public Set<String> listRole(String username) {
         return userMapper.listRole(username);
     }
@@ -37,6 +43,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<String> listUrl(String username) {
         return userMapper.listUrl(username);
+    }
+
+    @Override
+    public boolean saveUser(User user) {
+        return userMapper.saveUser(user);
+    }
+
+    @Override
+    public boolean deleteUser(User user) {
+        return userMapper.deleteUser(user);
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        return userMapper.updateUser(user);
     }
 
 

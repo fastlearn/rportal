@@ -20,10 +20,9 @@
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+                    <div style="margin-bottom: 10px;">
                         <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">标记已读</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="readyAll">全部已读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">添加</button>
                     </div>
                     <table id="permission" lay-filter="test"></table>
                 </div>
@@ -51,9 +50,11 @@ layui.use(['table', "element", "jquery"], function(){
     var table = layui.table;
     var cols = [
         {type:'checkbox'},
-        {"field": "permissionId", "title": "ID", align: "center", width: 50},
-        {"field": "url", "title": "URL资源", width: 150},
-        {"field": "permission", "title": "权限"},
+        {"field": "permissionId", "title": "ID", "align": "center", "width": 50},
+        {"field": "url", "title": "URL资源", "width": 150},
+        {"field": "permission", "title": "权限", "width": 200},
+        {"field": "description", "title": "描述"},
+        {"field": "sort", "title": "排序", "align": "center", "width": 60},
         {"field": "update", "title": "操作", toolbar: '#toolbar'}
     ];
     table.render({
@@ -96,27 +97,23 @@ layui.use(['table', "element", "jquery"], function(){
                     }
                 });
             });
-        } else if(layEvent === 'edit'){ //编辑
-            //do something
-
-            //同步更新缓存对应的值
-            obj.update({
-                username: '123'
-                ,title: 'xxx'
+        } else if(layEvent === 'authority'){ //赋权
+            layer.open({
+                title: true,
+                closeBtn: 0,
+                content: "<a>sdf</a>"
             });
         }
     });
 });
 </script>
 <script type="text/html" id="toolbar">
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">赋权</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-
-    <!-- 这里同样支持 laytpl 语法，如： -->
-    {{#  if(d.permissionId == 3){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="edit">赋权</a>
+    {{#  if(d.permissionId > 3){ }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } else { }}
+        <a class="layui-btn layui-btn-disabled layui-btn-xs">删除</a>
     {{#  } }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="authority">赋权</a>
 </script>
 </body>
 </html>
