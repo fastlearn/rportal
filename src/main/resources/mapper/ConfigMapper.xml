@@ -4,17 +4,23 @@
 <mapper namespace="com.renguangli.rportal.mapper.ConfigMapper">
 
     <!-- 开启mybatis二级缓存 -->
-    <cache></cache>
 
     <sql id="table_name">rportal_config</sql>
 
-    <select id="listConfig" resultType="Config">
-        select name,value
+    <select id="getConfig" resultType="Config">
+        select id,name,value,description
         from <include refid="table_name"/>
-        where name in
-        <foreach collection="names" item="name" index="index" open="(" separator="," close=")">
-            #{name}
-        </foreach>
+        where name = #{name}
+    </select>
+
+    <select id="listConfig" resultType="Config">
+        select id,name,value,description
+        from <include refid="table_name"/>
+    </select>
+
+    <select id="countConfig" resultType="int">
+        select count(*)
+        from <include refid="table_name"/>
     </select>
 
     <update id="update">

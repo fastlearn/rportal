@@ -26,8 +26,13 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public List<Config> listConfig(String... names) {
-        return configMapper.listConfig(names);
+    public Config getConfig(String name) {
+        return configMapper.getConfig(name);
+    }
+
+    @Override
+    public List<Config> listConfig(Config config) {
+        return configMapper.listConfig(config);
     }
 
     @Override

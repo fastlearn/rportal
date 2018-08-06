@@ -4,18 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.renguangli.rportal.bean.Config;
 import com.renguangli.rportal.service.ConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,25 +21,20 @@ import java.util.Map;
  * @author renguangli 2018/8/1 16:45
  * @since JDK 1.8
  */
-@Controller
-@RequestMapping("/config")
+@RestController
 public class ConfigController {
 
-    private final ConfigService configService;
+    @Resource
+    private ConfigService configService;
 
-    @Autowired
-    public ConfigController(ConfigService configService) {
-        this.configService = configService;
-    }
-
-    @GetMapping("/system")
-    public String config(String title, Model model) {
-        List<Config> configs = configService.listConfig("siteName", "domain", "indexUrl");
-        Map<String, Object> map = new HashMap<>();
-        configs.forEach(config -> map.put(config.getName(), config.getValue()));
-        model.addAttribute("title", title);
-        model.addAttribute("config", map);
-        return "config/system";
+    @GetMapping("/configs")
+    public Map<String, Object> listConfig(Config config) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 0);
+        result.put("count", 5);
+        result.put("msg", "获取配置信息成功");
+        result.put("data", configService.listConfig(config));
+        return result;
     }
 
     @ResponseBody

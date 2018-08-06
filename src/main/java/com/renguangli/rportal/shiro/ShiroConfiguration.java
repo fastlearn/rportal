@@ -5,7 +5,6 @@ import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -13,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
+import javax.servlet.Filter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,20 +30,6 @@ public class ShiroConfiguration {
 
     @Resource
     private ShiroService shiroService;
-
-    @Bean
-    public ValidateCodeFilter validateCodeFilter() {
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setValidateCode(true);
-        validateCodeFilter.setValidateCodeParam("validateCode");
-        return validateCodeFilter;
-    }
-
-    @Bean
-    public FormAuthenticationFilter formAuthenticationFilter() {
-        FormAuthenticationFilter formAuthenticationFilter = new CustomFormAuthenticationFilter();
-        return formAuthenticationFilter;
-    }
 
     @Bean
     public SimpleCookie simpleCookie() {
@@ -77,15 +64,19 @@ public class ShiroConfiguration {
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilter() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager()); //设置 SecurityManager
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        shiroFilterFactoryBean.setFilters();
-        shiroFilterFactoryBean.setLoginUrl("/login"); //设置登录链接
+        shiroFilterFactoryBean.setSecurityManager(securityManager()); // 设置 SecurityManager
+        shiroFilterFactoryBean.setLoginUrl("/login"); //设置登录链接,默认 /login.jsp
         shiroFilterFactoryBean.setSuccessUrl("/"); // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setUnauthorizedUrl("/403"); // 未授权跳转链接;
+
         // 从数据库中读取拦截链配置
         Map<String, String> filterChainDefinitionMap = shiroService.getFilterChainDefinitionMap();
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        // 添加自定义过滤器
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("authc", new CustomFormAuthenticationFilter());
+        filters.put("validateCode", new ValidateCodeFilter());
+        shiroFilterFactoryBean.setFilters(filters);
         return shiroFilterFactoryBean;
     }
 

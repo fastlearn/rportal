@@ -1,7 +1,6 @@
 package com.renguangli.rportal.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.renguangli.rportal.bean.Config;
 import com.renguangli.rportal.bean.User;
 import com.renguangli.rportal.service.ConfigService;
 import com.renguangli.rportal.service.UserService;
@@ -55,8 +54,6 @@ public class PageViewController {
 
     @GetMapping("/pageView")
     public String enterBackend(Model model) {
-        List<Config> configs = configService.listConfig("siteName", "indexUrl");
-        configs.forEach(config -> model.addAttribute(config.getName(), config.getValue()));
         return "backend/index";
     }
 
