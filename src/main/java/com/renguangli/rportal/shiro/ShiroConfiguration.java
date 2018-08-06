@@ -5,6 +5,7 @@ import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -28,6 +29,20 @@ public class ShiroConfiguration {
 
     @Resource
     private ShiroService shiroService;
+
+    @Bean
+    public ValidateCodeFilter validateCodeFilter() {
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        validateCodeFilter.setValidateCode(true);
+        validateCodeFilter.setValidateCodeParam("validateCode");
+        return validateCodeFilter;
+    }
+
+    @Bean
+    public FormAuthenticationFilter formAuthenticationFilter() {
+        FormAuthenticationFilter formAuthenticationFilter = new CustomFormAuthenticationFilter();
+        return formAuthenticationFilter;
+    }
 
     @Bean
     public SimpleCookie simpleCookie() {
@@ -63,6 +78,8 @@ public class ShiroConfiguration {
     public ShiroFilterFactoryBean shiroFilter() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager()); //设置 SecurityManager
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        shiroFilterFactoryBean.setFilters();
         shiroFilterFactoryBean.setLoginUrl("/login"); //设置登录链接
         shiroFilterFactoryBean.setSuccessUrl("/"); // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setUnauthorizedUrl("/403"); // 未授权跳转链接;

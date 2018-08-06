@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * UserController
+ *
+ * @author renguangli 2018/8/2 13:25
+ * @since JDK 1.8
+ */
 @RestController
 public class UserController {
 

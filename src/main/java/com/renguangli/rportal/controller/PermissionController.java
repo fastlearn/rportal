@@ -12,6 +12,12 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * PermissionController
+ *
+ * @author renguangli 2018/8/2 13:25
+ * @since JDK 1.8
+ */
 @RestController
 public class PermissionController {
 

@@ -24,6 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * PageViewController
+ *
+ * @author renguangli 2018/8/2 13:25
+ * @since JDK 1.8
+ */
 @Controller
 public class PageViewController {
 
@@ -44,14 +50,14 @@ public class PageViewController {
     @GetMapping("/{username}")
     public String enterFrontend(@PathVariable("username") String username) {
         User user = userService.getUser(new User(username));
-        return user == null ? "error/404" : "/backend/index";
+        return user == null ? "error/404" : "backend/index";
     }
 
     @GetMapping("/pageView")
     public String enterBackend(Model model) {
         List<Config> configs = configService.listConfig("siteName", "indexUrl");
         configs.forEach(config -> model.addAttribute(config.getName(), config.getValue()));
-        return "/backend/index";
+        return "backend/index";
     }
 
     @GetMapping("/pageView/{pageName}")
@@ -63,15 +69,15 @@ public class PageViewController {
     private String getView(String pageName) {
         if (pageViews.isEmpty()) {
             //系统配置页面
-            pageViews.put("config", "/backend/config");
+            pageViews.put("config", "backend/config");
             //dashboard页面
-            pageViews.put("dashboard", "/backend/dashboard");
+            pageViews.put("dashboard", "backend/dashboard");
             //用户管理页面
-            pageViews.put("user", "/backend/user");
+            pageViews.put("user", "backend/user");
             //角色管理页面
-            pageViews.put("role", "/backend/role");
+            pageViews.put("role", "backend/role");
             //权限管理页面
-            pageViews.put("permission", "/backend/permission");
+            pageViews.put("permission", "backend/permission");
         }
         return pageViews.get(pageName);
     }

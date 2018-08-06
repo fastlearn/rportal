@@ -14,6 +14,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ShiroServiceImpl
+ *
+ * @author renguangli 2018/8/2 13:25
+ * @since JDK 1.8
+ */
 @Service("shiroService")
 public class ShiroServiceImpl implements ShiroService {
 

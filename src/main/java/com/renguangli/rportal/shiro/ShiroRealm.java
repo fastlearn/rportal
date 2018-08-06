@@ -41,7 +41,6 @@ public class ShiroRealm extends AuthorizingRealm {
         if (user == null) { //用户不存在
             throw new UnknownAccountException();
         }
-        user.setLocked(true);
         if (user.isLocked()) {
             throw new LockedAccountException();
         }
