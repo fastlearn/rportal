@@ -11,18 +11,32 @@
 </head>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row">
-        <div class="layui-card">
-            <div class="layui-card-header">实时监控</div>
-            <div class="layui-card-body layadmin-takerates">
-                <div class="layui-progress" lay-showpercent="yes">
-                    <h3>CPU使用率</h3>
-                    <div id="cpu" class="layui-progress-bar" lay-percent="58%" style="width: 58%;"></div>
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">全部消息</li>
+                <li>通知<span class="layui-badge">6</span></li>
+                <li>私信</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">添加</button>
+                    </div>
+                    <table id="user" lay-filter="test"></table>
                 </div>
-                <div class="layui-progress" lay-showpercent="yes">
-                    <h3>内存占用率</h3>
-                    <div id="memory" class="layui-progress-bar layui-bg-red" lay-percent="50%" style="width: 50%;"></div>
+                <div class="layui-tab-item">
+
+                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="ready">标记已读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="readyAll">全部已读</button>
+                    </div>
+
+                    <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
                 </div>
+
             </div>
         </div>
     </div>
@@ -30,30 +44,97 @@
 <script th:src="@{/static/layui/layui.js}"></script>
 <script th:inline="javascript">
 var ctx = /*[[@{/}]]*/ "";
-layui.use(['jquery'], function(){
-    $= layui.jquery;
-    setInterval(function () {
-        $.ajax({
-            type: "GET",
-            url: ctx + "monitor",
-            dataType: "json",
-            success: function(data){
-                var cpu = data.cpu.toFixed(4) + "%";
-                $("#cpu").css("width", cpu);
-                $("#cpu").attr("lay-percent", cpu);
-                $("#cpu").html('<span class="layui-progress-text">' + cpu + '</span>');
+layui.use(['table', "element", "jquery"], function(){
+    var $ = layui.jquery;
+    var table = layui.table;
+    var cols = [
+        {type:'checkbox'},
+        {"field": "userId", "title": "ID", "align": "center", "width": 50},
+        {"field": "username", "title": "用户名", "width": 100},
+        /*{"field": "password", "title": "密码"},*/
+        {"field": "name", "title": "真实姓名"},
+        {"field": "phoneNumber", "title": "电话"},
+        {"field": "email", "title": "邮箱"},
+        {"field": "createDatetime", "title": "创建时间"},
+        /*{"field": "updateDatetime", "title": "更新日期"},*/
+        {"field": "update", "title": "操作", "align": "center", "toolbar": '#toolbar'}
+    ];
+    var options = {
+        elem: '#user',
+        url: ctx + "users",
+        where: {}, //设定异步数据接口的额外参数
+        text: "-",
+        done: function(res, curr, count){
 
-                var memory = data.memory.toFixed(4) + "%";
-                $("#memory").css("width", memory);
-                $("#memory").attr("lay-percent", memory);
-                $("#memory").html('<span class="layui-progress-text">' + memory + '</span>')
+        },
+        page: true,
+        cols: [cols]
+    };
+    var tableIns = table.render(options);
+
+    table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+        if(layEvent === 'detail'){ //查看
+            //do somehing
+        } else if(layEvent === 'lock'){ //锁定
+            layer.confirm('你确定要锁定用户[' + obj.data.username + ']么', function(index){
+                if (updateUser(obj.data, 1)) {
+                    tableIns.reload();
+                    layer.close(index);
+                    layer.msg("锁定成功！")
+                } else {
+                    layer.msg("锁定失败！")
+                }
+            });
+        } else if(layEvent === 'unlock'){ //解锁
+            layer.confirm('你确定要解锁用户[' + obj.data.username + ']么', function(index){
+                if (updateUser(obj.data, 0)) {
+                    tableIns.reload();
+                    layer.close(index);
+                    layer.msg("解锁成功！")
+                } else {
+                    layer.msg("解锁失败！")
+                }
+            });
+        }
+    });
+
+    function updateUser(user, locked) {
+        var flag = false;
+        $.ajax({//异步请求返回给后台
+            url:ctx + "user",
+            type:'POST',
+            data: {
+                _method: "PUT",
+                userId: user.userId,
+                locked: locked
             },
-            error: function (e) {
-
+            dataType:'json',
+            async: false,
+            success:function(data){
+                flag = data;
+            },
+            error() {
+                layer.msg("后台接口接异常，请求失败！");
+                flag = false;
             }
         });
-    }, 1000)
+        return flag;
+    }
 });
+
+
+</script>
+<script type="text/html" id="toolbar">
+    {{#  if(d.locked == 1){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="unlock">解锁</a>
+    {{#  } else { }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="lock">锁定</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="authority">赋权</a>
 </script>
 </body>
 </html>

@@ -13,16 +13,23 @@ public class User implements Serializable{
 
     private static final long serialVersionUID = -9158393508008723437L;
 
+    /**
+     * 账号锁定
+     */
+    public static final Integer LOCKED = 1;
+
     private Integer userId;
 
     private String username;
 
     private String password;
 
+    private String salt;
+
     /**
-     * 账号是否锁定，默认false
+     * 账号是否锁定，1锁定，0未锁定
      */
-    private boolean locked;
+    private Integer locked;
 
     /**
      * 默认90天过期
@@ -51,7 +58,7 @@ public class User implements Serializable{
     /**
      * 密码更新日期
      */
-    private LocalDateTime passUpdateDatetime;
+    private LocalDateTime passwordUpdateDatetime;
 
     public User() {}
 
@@ -87,11 +94,19 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public boolean isLocked() {
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public Integer getLocked() {
         return locked;
     }
 
-    public void setLocked(boolean locked) {
+    public void setLocked(Integer locked) {
         this.locked = locked;
     }
 
@@ -143,12 +158,12 @@ public class User implements Serializable{
         this.updateDatetime = updateDatetime;
     }
 
-    public LocalDateTime getPassUpdateDatetime() {
-        return passUpdateDatetime;
+    public LocalDateTime getPasswordUpdateDatetime() {
+        return passwordUpdateDatetime;
     }
 
-    public void setPassUpdateDatetime(LocalDateTime passUpdateDatetime) {
-        this.passUpdateDatetime = passUpdateDatetime;
+    public void setPasswordUpdateDatetime(LocalDateTime passwordUpdateDatetime) {
+        this.passwordUpdateDatetime = passwordUpdateDatetime;
     }
 
     @Override
@@ -157,6 +172,7 @@ public class User implements Serializable{
                 "userId=" + userId +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
                 ", locked=" + locked +
                 ", expired=" + expired +
                 ", name='" + name + '\'' +
@@ -164,7 +180,7 @@ public class User implements Serializable{
                 ", email='" + email + '\'' +
                 ", createDatetime=" + createDatetime +
                 ", updateDatetime=" + updateDatetime +
-                ", passUpdateDatetime=" + passUpdateDatetime +
+                ", passwordUpdateDatetime=" + passwordUpdateDatetime +
                 '}';
     }
 }

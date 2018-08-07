@@ -24,7 +24,7 @@ public interface UserMapper {
 
     boolean saveUser(User user);
 
-    boolean deleteUser(User user);
+    boolean deleteUser(@Param("userId") Integer userId);
 
-    boolean updateUser(User user);
+    boolean updateUser(@Param("user") User user);
 }

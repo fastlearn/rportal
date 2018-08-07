@@ -5,6 +5,7 @@ import com.renguangli.rportal.mapper.UserMapper;
 import com.renguangli.rportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -51,11 +52,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(User user) {
-        return userMapper.deleteUser(user);
+    public boolean deleteUser(Integer userId) {
+        return userMapper.deleteUser(userId);
     }
 
     @Override
+    @Transactional
     public boolean updateUser(User user) {
         return userMapper.updateUser(user);
     }

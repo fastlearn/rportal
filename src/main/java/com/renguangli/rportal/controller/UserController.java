@@ -5,7 +5,8 @@ import com.renguangli.rportal.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * UserController
@@ -20,8 +21,13 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public List<User> listUser(User user) {
-        return userService.listUser(user);
+    public Map<String, Object> listUser(User user) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 0);
+        result.put("count", 5);
+        result.put("msg", "获取用户信息成功");
+        result.put("data", userService.listUser(user));
+        return result;
     }
 
     @PostMapping("/user")
@@ -31,11 +37,12 @@ public class UserController {
 
     @DeleteMapping("/user/{userId}")
     public boolean deleteUser(@PathVariable("userId") Integer userId) {
-        return userService.deleteUser(new User(userId));
+        return userService.deleteUser(userId);
     }
 
     @PutMapping("/user")
     public boolean updateUser(User user) {
         return userService.updateUser(user);
     }
+
 }

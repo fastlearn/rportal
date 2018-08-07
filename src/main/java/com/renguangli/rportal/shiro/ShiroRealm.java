@@ -10,6 +10,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * ShiroRealm
@@ -38,16 +40,16 @@ public class ShiroRealm extends AuthorizingRealm {
         String username = token.getUsername();
         User user = new User(username);
         user = userService.getUser(user);
-        if (user == null) { //用户不存在
+        if (user == null) { // 用户不存在
             throw new UnknownAccountException();
         }
-        if (user.isLocked()) {
+        if (User.LOCKED.equals(user.getLocked())) {// 账号锁定
             throw new LockedAccountException();
         }
-       /* long days = ChronoUnit.DAYS.between(user.getPassUpdateDatetime(), LocalDateTime.now());
-        if (user.getExpired() > days) {
+        long days = ChronoUnit.DAYS.between(user.getPasswordUpdateDatetime(), LocalDateTime.now());
+        if (user.getExpired() < days) { // 密码过期
             throw new ExpiredCredentialsException();
-        }*/
+        }
         String password = user.getPassword();
         //构造一个用户认证信息并返回，后面会通过这个和token的pwd进行对比。
         return new SimpleAuthenticationInfo(username,password,this.getName());

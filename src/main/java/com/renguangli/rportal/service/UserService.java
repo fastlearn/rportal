@@ -23,7 +23,7 @@ public interface UserService {
 
     boolean saveUser(User user);
 
-    boolean deleteUser(User user);
+    boolean deleteUser(Integer userId);
 
     boolean updateUser(User user);
 }
