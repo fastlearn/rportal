@@ -24,6 +24,9 @@ public class RportalApplication extends SpringBootServletInitializer {
         ctx = SpringApplication.run(RportalApplication.class, args);
     }
 
+    /**
+     * 使war可在外部tomcat下使用
+     */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(RportalApplication.class);

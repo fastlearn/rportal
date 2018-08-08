@@ -18,6 +18,8 @@ public class Config implements Serializable{
 
     private String value;
 
+    private String description;
+
     public Config() {}
 
     public Config(String name, String value) {
@@ -25,10 +27,11 @@ public class Config implements Serializable{
         this.value = value;
     }
 
-    public Config(Integer id, String name, String value) {
+    public Config(Integer id, String name, String value, String description) {
         this.id = id;
         this.name = name;
         this.value = value;
+        this.description = description;
     }
 
     public Integer getId() {
@@ -55,9 +58,22 @@ public class Config implements Serializable{
         this.value = value;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
-        return "Config{" + "id=" + id + ", name=" + name + ", value=" + value + "}";
+        return "Config{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 
 }

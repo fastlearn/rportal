@@ -15,11 +15,11 @@
         <div class="layui-card">
             <div class="layui-card-header">实时监控</div>
             <div class="layui-card-body layadmin-takerates">
-                <div class="layui-progress" lay-showpercent="yes">
+                <div class="layui-progress" lay-showpercent="yes" lay-filter="cpu">
                     <h3>CPU使用率</h3>
                     <div id="cpu" class="layui-progress-bar" lay-percent="58%" style="width: 58%;"></div>
                 </div>
-                <div class="layui-progress" lay-showpercent="yes">
+                <div class="layui-progress" lay-showpercent="yes" lay-filter="memory">
                     <h3>内存占用率</h3>
                     <div id="memory" class="layui-progress-bar layui-bg-red" lay-percent="50%" style="width: 50%;"></div>
                 </div>
@@ -30,8 +30,9 @@
 <script th:src="@{/static/layui/layui.js}"></script>
 <script th:inline="javascript">
 var ctx = /*[[@{/}]]*/ "";
-layui.use(['jquery'], function(){
+layui.use(['jquery','element'], function(){
     $= layui.jquery;
+    var element = layui.element;
     setInterval(function () {
         $.ajax({
             type: "GET",
@@ -39,14 +40,9 @@ layui.use(['jquery'], function(){
             dataType: "json",
             success: function(data){
                 var cpu = data.cpu.toFixed(4) + "%";
-                $("#cpu").css("width", cpu);
-                $("#cpu").attr("lay-percent", cpu);
-                $("#cpu").html('<span class="layui-progress-text">' + cpu + '</span>');
-
+                element.progress('cpu', cpu);
                 var memory = data.memory.toFixed(4) + "%";
-                $("#memory").css("width", memory);
-                $("#memory").attr("lay-percent", memory);
-                $("#memory").html('<span class="layui-progress-text">' + memory + '</span>')
+                element.progress('memory', memory);
             },
             error: function (e) {
 

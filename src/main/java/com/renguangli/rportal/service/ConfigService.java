@@ -14,7 +14,13 @@ public interface ConfigService {
 
     Config getConfig(String name);
 
-    List<Config> listConfig(Config config);
+    List<Config> listConfig(Config config, int page, int limit);
+
+    int countConfig(Config config);
 
     boolean updateConfig(List<Config> configs);
+
+    boolean deleteConfig(String id);
+
+    boolean batchDeleteConfig(Integer[] ids);
 }

@@ -16,16 +16,37 @@
     <select id="listConfig" resultType="Config">
         select id,name,value,description
         from <include refid="table_name"/>
+        where 1=1
+        <if test="config.name != null and config.name != ''">
+            and name like concat(#{config.name},'%')
+        </if>
+        limit #{page},#{limit}
     </select>
 
     <select id="countConfig" resultType="int">
         select count(*)
         from <include refid="table_name"/>
+        where 1=1
+        <if test="config.name != null and config.name != ''">
+            and name like concat(#{config.name},'%')
+        </if>
     </select>
 
-    <update id="update">
-        update <include refid="table_name"/>
-        set value = #{config.value}
-        where name = #{config.name}
+    <delete id="deleteConfig">
+        delete from <include refid="table_name"/>
+        where id = #{id}
+    </delete>
+
+    <delete id="batchDeleteConfig">
+        delete from <include refid="table_name"/>
+        where id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateConfig">
+        delete from <include refid="table_name"/>
+        where id = #{id}
     </update>
 </mapper>

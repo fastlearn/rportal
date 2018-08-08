@@ -17,7 +17,13 @@ public interface ConfigMapper {
 
     Config getConfig(@Param("name") String name);
 
-    boolean update(@Param("config") Config config);
+    List<Config> listConfig(@Param("config") Config config, @Param("page") int page, @Param("limit") int limit);
 
-    List<Config> listConfig(@Param("config") Config config);
+    boolean deleteConfig(@Param("id") String id);
+
+    boolean batchDeleteConfig(@Param("ids") Integer[] ids);
+
+    boolean updateConfig(@Param("config") Config config);
+
+    int countConfig(@Param("config") Config config);
 }

@@ -3,17 +3,14 @@ package com.renguangli.rportal.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.renguangli.rportal.bean.Config;
+import com.renguangli.rportal.bean.Result;
 import com.renguangli.rportal.service.ConfigService;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * ConfigController
@@ -28,16 +25,25 @@ public class ConfigController {
     private ConfigService configService;
 
     @GetMapping("/configs")
-    public Map<String, Object> listConfig(Config config) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("code", 0);
-        result.put("count", 5);
-        result.put("msg", "获取配置信息成功");
-        result.put("data", configService.listConfig(config));
-        return result;
+    public Result listConfig(Config config, int page, int limit) {
+        List<Config> data = configService.listConfig(config, page - 1, limit);
+        int count = configService.countConfig(config);
+        return new Result(data, count);
     }
 
-    @ResponseBody
+    @DeleteMapping("/config/{id}")
+    public boolean deleteConfig(@PathVariable String id) {
+        return configService.deleteConfig(id);
+    }
+
+    @DeleteMapping("/configs")
+    public boolean batchDeleteConfig(@RequestParam(value = "ids[]", required = false) Integer[] ids) {
+        if (ids == null || ids.length == 0) {
+            return false;
+        }
+        return configService.batchDeleteConfig(ids);
+    }
+
     @PostMapping("/system")
     public boolean updateConfig(String params) {
         if (StringUtils.isEmpty(params)) {

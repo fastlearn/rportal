@@ -8,31 +8,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
     <link rel="stylesheet" th:href="@{/static/lib/admin.css}" media="all">
+    <style>
+        .config-input {
+            width: auto;
+            height: 30px;
+            margin-right: 10px;
+            display: inline;
+        }
+    </style>
 </head>
 <body>
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">全部消息</li>
-                <li>通知<span class="layui-badge">6</span></li>
-                <li>私信</li>
+                <li class="layui-this">全部配置</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">添加</button>
+                        <input id="config-name" type="text" class="layui-input config-input" placeholder="请输入关键字" />
+                        <button class="layui-btn layui-btn-normal layui-btn-sm" id="query">查询</button>
+                        <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">批量删除</button>
                     </div>
-                    <table id="config" lay-filter="test"></table>
-                </div>
-                <div class="layui-tab-item">
-                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="ready">标记已读</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="readyAll">全部已读</button>
-                    </div>
-                    <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
+                    <table id="config" lay-filter="config"></table>
                 </div>
             </div>
         </div>
@@ -40,75 +39,127 @@
 </div>
 <script th:src="@{/static/layui/layui.js}"></script>
 <script th:inline="javascript">
-    var ctx = /*[[@{/}]]*/ "";
-    layui.use(['table', "element", "jquery"], function(){
-        var $ = layui.jquery;
-        var table = layui.table;
-        var cols = [
-            {type:'checkbox'},
-            {"field": "id", "title": "ID", "align": "center", "width": 50},
-            {"field": "name", "title": "配置", "width": 150},
-            {"field": "value", "title": "配置信息", "width": 200},
-            {"field": "description", "title": "描述"},
-            {"field": "update", "title": "操作", toolbar: '#toolbar'}
-        ];
-        table.render({
-            elem: '#config',
-            url: ctx + "configs",
-            where: {}, //设定异步数据接口的额外参数
-            text: "-",
-            done: function(res, curr, count){
+var ctx = /*[[@{/}]]*/ "";
+layui.use(['table', "element", "jquery"], function(){
+    var $ = layui.jquery;
+    var element = layui.element;
+    var table = layui.table;
+    var cols = [
+        {type:'checkbox'},
+        {"field": "id", "title": "ID", "align": "center", "width": 50},
+        {"field": "name", "title": "配置", "width": 200},
+        {"field": "value", "title": "配置信息", "width": 200},
+        {"field": "description", "title": "描述"},
+        {"field": "update", "title": "操作", toolbar: '#toolbar'}
+    ];
+    var options = {
+        elem: '#config',
+        url: ctx + "configs",
+        where: { //设定异步数据接口的额外参数
+            name: $("#config-name").val()
+        },
+        response: {
+            statusName: 'code', // 数据状态的字段名称，默认：code
+            msgName: 'message', // 状态信息的字段名称，默认：msg
+            countName: 'count', // 数据总数的字段名称，默认：count
+            dataName: 'data' // 数据列表的字段名称，默认：data
+        },
+        text: {
+            none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+        },
+        cols: [cols],
+        page: true
+    };
 
-            },
-            page: true,
-            cols: [cols]
-        });
+    var tableIns = table.render(options);
 
-        table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-            var data = obj.data; //获得当前行数据
-            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            var tr = obj.tr; //获得当前行 tr 的DOM对象
+    table.on('tool(config)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-            if(layEvent === 'detail'){ //查看
-                //do somehing
-            } else if(layEvent === 'del'){ //删除
-                layer.confirm('真的删除行么', function(index){
-                    alert(obj.data.permissionId)
-                    $.ajax({//异步请求返回给后台
-                        url:ctx + "permission?permissionId=" + obj.data.permissionId,
-                        type:'DELETE',
-                        dataType:'json',
-                        success:function(data){
-                            if (data) {
-                                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                layer.close(index);
-                                layer.msg("删除成功！")
-                            } else {
-                                layer.msg("删除失败，该数据不存在或已删除！")
-                            }
-                        },
-                        error() {
-                            layer.msg("后台接口接异常，删除失败！")
+        if(layEvent === 'detail'){ //查看
+            //do somehing
+        } else if(layEvent === 'del'){ //删除
+            layer.confirm('真的删除行么', function(index){
+                $.ajax({//异步请求返回给后台
+                    url:ctx + "config/" +obj.data.id,
+                    type:'DELETE',
+                    dataType:'json',
+                    success:function(data){
+                        if (data) {
+                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            layer.close(index);
+                            layer.msg("删除成功！")
+                        } else {
+                            layer.msg("删除失败，该数据不存在或已删除！")
                         }
-                    });
+                    },
+                    error() {
+                        layer.msg("后台接口接异常，删除失败！")
+                    }
                 });
-            } else if(layEvent === 'authority'){ //赋权
-                layer.open({
-                    title: true,
-                    closeBtn: 0,
-                    content: "<a>sdf</a>"
-                });
+            });
+        } else if(layEvent === 'edit'){ //编辑
+            layer.open({
+                title: true,
+                closeBtn: 0,
+                content: "<a>sdf</a>"
+            });
+        }
+    });
+
+    $("#query").on("click", function () {
+        options.where.name = $("#config-name").val();
+        tableIns.reload(options);
+    });
+
+    $("#del").on("click", function () {
+        var checkStatus = table.checkStatus('config'); //test即为基础参数id对应的值
+        if (checkStatus.data.length === 0) {
+            layer.msg("未选中数据行");
+        } else {
+            var ids = [];
+            $.each(checkStatus.data, function (i, config) {
+                ids.push(config.id);
+            });
+            layer.confirm('真的删除行么', function(index){
+                if (batchDeleteConfig(ids)) {
+                    layer.msg("删除成功！");
+                } else {
+                    layer.msg("删除失败，该数据不存在或已删除！")
+                }
+                layer.close(index);
+            });
+        }
+        //console.log(checkStatus.isAll ) //表格是否全选
+    });
+    
+    function batchDeleteConfig(ids) {
+        var flag = false;
+        $.ajax({//异步请求返回给后台
+            url:ctx + "configs",
+            type:'POST',
+            dataType:'json',
+            data: {
+                _method: "DELETE",
+                ids: ids
+            },
+            async: false,
+            success:function(data){
+                flag = data;
+            },
+            error() {
+                flag = false;
             }
         });
-    });
+        return flag;
+    }
+});
 </script>
 <script type="text/html" id="toolbar">
-    {{#  if(d.permissionId > 3){ }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    {{#  } else { }}
-    <a class="layui-btn layui-btn-disabled layui-btn-xs">删除</a>
-    {{#  } }}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="authority">赋权</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
 </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.renguangli.rportal.service.impl;
 
 import com.renguangli.rportal.bean.Config;
 import com.renguangli.rportal.mapper.ConfigMapper;
+import com.renguangli.rportal.mapper.UserMapper;
 import com.renguangli.rportal.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +32,29 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public List<Config> listConfig(Config config) {
-        return configMapper.listConfig(config);
+    public List<Config> listConfig(Config config, int page, int limit) {
+        return configMapper.listConfig(config, page, limit);
+    }
+
+    @Override
+    public int countConfig(Config config) {
+        return configMapper.countConfig(config);
+    }
+
+    @Override
+    public boolean deleteConfig(String id) {
+        return configMapper.deleteConfig(id);
+    }
+
+    @Override
+    public boolean batchDeleteConfig(Integer[] ids) {
+        return configMapper.batchDeleteConfig(ids);
     }
 
     @Override
     public boolean updateConfig(List<Config> configs) {
-        configs.forEach(configMapper::update);
+        configs.forEach(configMapper::updateConfig);
         return true;
     }
+
 }
