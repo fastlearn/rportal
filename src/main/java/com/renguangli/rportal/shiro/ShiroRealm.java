@@ -31,6 +31,8 @@ public class ShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.setRoles(userService.listRole(username));
         authorizationInfo.setStringPermissions(userService.listUrl(username));
+        userService.listRole(username).forEach(System.out::println);
+        System.out.println();
         return authorizationInfo;
     }
 

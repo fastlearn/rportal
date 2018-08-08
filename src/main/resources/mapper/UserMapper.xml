@@ -62,7 +62,7 @@
     </update>
 
     <select id="listRole" resultType="String">
-        select r.role_code
+        select r.role
         from <include refid="table_name" /> u
           left join rportal_user_role ur on ur.user_id = u.user_id
           left join rportal_role r on r.role_id = ur.role_id

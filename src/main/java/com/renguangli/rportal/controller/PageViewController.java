@@ -48,6 +48,9 @@ public class PageViewController {
 
     @GetMapping("/{username}")
     public String enterFrontend(@PathVariable("username") String username) {
+        if ("403".equals(username)) {
+            return "error/403";
+        }
         User user = userService.getUser(new User(username));
         return user == null ? "error/404" : "backend/index";
     }

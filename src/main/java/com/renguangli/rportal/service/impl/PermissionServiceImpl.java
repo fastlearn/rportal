@@ -6,7 +6,6 @@ import com.renguangli.rportal.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +25,19 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<Permission> listPermission(Permission permission) {
-        return permissionMapper.listPermission(permission);
+    public List<Permission> listPermission() {
+        return permissionMapper.listAllPermission();
+    }
+
+    @Override
+    public List<Permission> listPermission(Permission permission, Integer page, Integer limit) {
+        page = (page -1) * limit;
+        return permissionMapper.listPermission(permission, page, limit);
+    }
+
+    @Override
+    public int countPermission(Permission permission) {
+        return permissionMapper.countPermission(permission);
     }
 
     @Override

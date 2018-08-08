@@ -13,9 +13,15 @@ import java.util.List;
  */
 public interface PermissionMapper {
 
-    List<Permission> listPermission(@Param("permission") Permission permission);
+    List<Permission> listAllPermission();
+
+    List<Permission> listPermission(@Param("permission") Permission permission, @Param("page") Integer page, @Param("limit") Integer limit);
+
+    int countPermission(@Param("permission") Permission permission);
 
     boolean save(@Param("permission") Permission permission);
 
     boolean deletePermission(@Param("permission") Permission permission);
+
+
 }

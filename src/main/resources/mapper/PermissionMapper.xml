@@ -5,14 +5,30 @@
 
     <sql id="table_name">rportal_permission</sql>
 
+    <select id="listAllPermission" resultType="Permission">
+        select permission_id permissionId,url,permission,description,sort
+        from <include refid="table_name" />
+        order by sort
+    </select>
+
     <select id="listPermission" resultType="Permission">
         select permission_id permissionId,url,permission,description,sort
         from <include refid="table_name" />
         where 1=1
-        <if test="permission != null and permission.url">
+        <if test="permission.url != null and permission.url != ''">
           and url = #{permission.url}
         </if>
         order by sort
+        limit #{page}, #{limit}
+    </select>
+
+    <select id="countPermission" resultType="int">
+        select count(*)
+        from <include refid="table_name" />
+        where 1=1
+        <if test="permission.url != null and permission.url != ''">
+          and url = #{permission.url}
+        </if>
     </select>
 
     <insert id="savePermission">

@@ -8,36 +8,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
     <link rel="stylesheet" th:href="@{/static/lib/admin.css}" media="all">
+
+    <style>
+        .permission-input {
+            width: auto;
+            height: 30px;
+            margin-right: 10px;
+            display: inline;
+        }
+    </style>
 </head>
 <body>
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">全部消息</li>
-                <li>通知<span class="layui-badge">6</span></li>
-                <li>私信</li>
+                <li class="layui-this">全部权限</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">添加</button>
+                        <input id="config-name" type="text" class="layui-input permission-input" placeholder="请输入关键字" />
+                        <button class="layui-btn layui-btn-normal layui-btn-sm" id="query">查询</button>
+                        <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">批量删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="add">添加</button>
                     </div>
-                    <table id="permission" lay-filter="test"></table>
+                    <table id="permission" lay-filter="permission"></table>
                 </div>
-                <div class="layui-tab-item">
-
-                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="ready">标记已读</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="readyAll">全部已读</button>
-                    </div>
-
-                    <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
-                </div>
-
-
             </div>
         </div>
     </div>
@@ -61,15 +58,11 @@ layui.use(['table', "element", "jquery"], function(){
         elem: '#permission',
         url: ctx + "permissions",
         where: {}, //设定异步数据接口的额外参数
-        text: "-",
-        done: function(res, curr, count){
-
-        },
-        page: true,
-        cols: [cols]
+        cols: [cols],
+        page: true
     });
 
-    table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+    table.on('tool(permission)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var tr = obj.tr; //获得当前行 tr 的DOM对象

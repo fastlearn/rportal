@@ -29,11 +29,6 @@ public class ConfigController {
 
     @PostMapping("/config")
     public boolean saveConfig(Config config) {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return configService.saveConfig(config);
     }
 

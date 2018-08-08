@@ -12,9 +12,15 @@ import java.util.List;
  */
 public interface PermissionService {
 
-    List<Permission> listPermission(Permission permission);
+    List<Permission> listPermission();
+
+    List<Permission> listPermission(Permission permission, Integer page, Integer limit);
+
+    int countPermission(Permission permission);
 
     boolean savePermission(Permission permission);
 
     boolean deletePermission(Permission permission);
+
+
 }
