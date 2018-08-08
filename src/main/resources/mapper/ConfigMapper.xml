@@ -54,7 +54,8 @@
     <update id="updateConfig">
         update <include refid="table_name"/>
         set name = #{config.name},
-        value = #{config.value}
+        value = #{config.value},
+        description = #{config.description}
         where id = #{config.id}
     </update>
 </mapper>

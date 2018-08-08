@@ -90,7 +90,8 @@ layui.use(['table', "element", "jquery"], function(){
                 msg: "更新",
                 id: data.id,
                 name: data.name,
-                value: data.value
+                value: data.value,
+                description: data.description
             };
             layerAlert(options);
         }
@@ -109,7 +110,8 @@ layui.use(['table', "element", "jquery"], function(){
             _method: "",
             msg: "添加",
             name: "",
-            value: ""
+            value: "",
+            description: ""
         };
         layerAlert(options);
     });
@@ -153,11 +155,17 @@ layui.use(['table', "element", "jquery"], function(){
             '            <input type="text" id="config-value" value="' + options.value + '" class="layui-input">\n' +
             '        </div>\n' +
             '    </div>\n' +
+            '    <div class="layui-form-item">\n' +
+            '        <label class="layui-form-label">描述</label>\n' +
+            '        <div class="layui-input-inline">\n' +
+            '            <input type="text" id="config-description" value="' + options.description + '" class="layui-input">\n' +
+            '        </div>\n' +
+            '    </div>\n' +
             '</form>';
         layer.open({
             type: 1, //此处以iframe举例
             title: options.title,
-            area: ['380px', '230px'],
+            area: ['380px', '280px'],
             content: content,
             btn: [options.btn, '关闭'],
             yes: function(index){
@@ -165,7 +173,8 @@ layui.use(['table', "element", "jquery"], function(){
                     _method: options._method,
                     id: options.id,
                     name: $("#config-name-add").val(),
-                    value: $("#config-value").val()
+                    value: $("#config-value").val(),
+                    description: $("#config-description").val()
                 };
                 request(options.url, options.method, params, options.msg);
                 layer.close(index);
