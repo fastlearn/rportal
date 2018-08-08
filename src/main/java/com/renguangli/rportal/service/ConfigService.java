@@ -18,7 +18,9 @@ public interface ConfigService {
 
     int countConfig(Config config);
 
-    boolean updateConfig(List<Config> configs);
+    boolean saveConfig(Config config);
+
+    boolean updateConfig(Config config);
 
     boolean deleteConfig(String id);
 

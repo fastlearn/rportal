@@ -30,6 +30,7 @@
                         <input id="config-name" type="text" class="layui-input config-input" placeholder="请输入关键字" />
                         <button class="layui-btn layui-btn-normal layui-btn-sm" id="query">查询</button>
                         <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">批量删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="add">添加</button>
                     </div>
                     <table id="config" lay-filter="config"></table>
                 </div>
@@ -42,11 +43,10 @@
 var ctx = /*[[@{/}]]*/ "";
 layui.use(['table', "element", "jquery"], function(){
     var $ = layui.jquery;
-    var element = layui.element;
+    //var element = layui.element;
     var table = layui.table;
     var cols = [
         {type:'checkbox'},
-        {"field": "id", "title": "ID", "align": "center", "width": 50},
         {"field": "name", "title": "配置", "width": 200},
         {"field": "value", "title": "配置信息", "width": 200},
         {"field": "description", "title": "描述"},
@@ -55,7 +55,7 @@ layui.use(['table', "element", "jquery"], function(){
     var options = {
         elem: '#config',
         url: ctx + "configs",
-        where: { //设定异步数据接口的额外参数
+        where: {
             name: $("#config-name").val()
         },
         response: {
@@ -64,9 +64,6 @@ layui.use(['table', "element", "jquery"], function(){
             countName: 'count', // 数据总数的字段名称，默认：count
             dataName: 'data' // 数据列表的字段名称，默认：data
         },
-        text: {
-            none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
-        },
         cols: [cols],
         page: true
     };
@@ -74,44 +71,47 @@ layui.use(['table', "element", "jquery"], function(){
     var tableIns = table.render(options);
 
     table.on('tool(config)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-        var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-        var tr = obj.tr; //获得当前行 tr 的DOM对象
+        var data = obj.data; //获得当前行数据
+        //var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-        if(layEvent === 'detail'){ //查看
-            //do somehing
-        } else if(layEvent === 'del'){ //删除
-            layer.confirm('真的删除行么', function(index){
-                $.ajax({//异步请求返回给后台
-                    url:ctx + "config/" +obj.data.id,
-                    type:'DELETE',
-                    dataType:'json',
-                    success:function(data){
-                        if (data) {
-                            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                            layer.close(index);
-                            layer.msg("删除成功！")
-                        } else {
-                            layer.msg("删除失败，该数据不存在或已删除！")
-                        }
-                    },
-                    error() {
-                        layer.msg("后台接口接异常，删除失败！")
-                    }
-                });
+        if(layEvent === 'del'){ //删除
+            layer.confirm('你确定要删除配置[' + data.name + ']么', function(index){
+                request("config/" + data.id, "POST", {_method: "DELETE"}, "删除");
+                layer.close(index);
             });
         } else if(layEvent === 'edit'){ //编辑
-            layer.open({
-                title: true,
-                closeBtn: 0,
-                content: "<a>sdf</a>"
-            });
+            var options = {
+                title: "更新配置",
+                btn: "更新",
+                url: "config",
+                method: "POST",
+                _method: "PUT",
+                msg: "更新",
+                id: data.id,
+                name: data.name,
+                value: data.value
+            };
+            layerAlert(options);
         }
     });
 
-    $("#query").on("click", function () {
-        options.where.name = $("#config-name").val();
-        tableIns.reload(options);
+    $("#query").click(function () {
+        refresh();
+    });
+
+    $("#add").click(function () {
+        var options = {
+            title: "添加配置",
+            btn: "保存",
+            url: "config",
+            method: "POST",
+            _method: "",
+            msg: "添加",
+            name: "",
+            value: ""
+        };
+        layerAlert(options);
     });
 
     $("#del").on("click", function () {
@@ -124,36 +124,82 @@ layui.use(['table', "element", "jquery"], function(){
                 ids.push(config.id);
             });
             layer.confirm('真的删除行么', function(index){
-                if (batchDeleteConfig(ids)) {
-                    layer.msg("删除成功！");
-                } else {
-                    layer.msg("删除失败，该数据不存在或已删除！")
-                }
+                var params = {_method: "DELETE", ids:ids};
+                request("configs", "POST", params, "删除");
                 layer.close(index);
             });
         }
-        //console.log(checkStatus.isAll ) //表格是否全选
+        // console.log(checkStatus.isAll ) //表格是否全选
     });
-    
-    function batchDeleteConfig(ids) {
-        var flag = false;
-        $.ajax({//异步请求返回给后台
-            url:ctx + "configs",
-            type:'POST',
-            dataType:'json',
-            data: {
-                _method: "DELETE",
-                ids: ids
+
+    // 重新加载数据
+    function refresh() {
+        options.where.name = $("#config-name").val();
+        tableIns.reload(options);
+    }
+
+    // 添加更新配置弹窗
+    function layerAlert(options) {
+        var content = '<form style="margin-top: 20px;" class="layui-form">\n' +
+            '    <div class="layui-form-item">\n' +
+            '        <label class="layui-form-label">配置名称</label>\n' +
+            '        <div class="layui-input-inline">\n' +
+            '            <input type="text" id="config-name-add" value="' + options.name + '" class="layui-input">\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <div class="layui-form-item">\n' +
+            '        <label class="layui-form-label">配置值</label>\n' +
+            '        <div class="layui-input-inline">\n' +
+            '            <input type="text" id="config-value" value="' + options.value + '" class="layui-input">\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '</form>';
+        layer.open({
+            type: 1, //此处以iframe举例
+            title: options.title,
+            area: ['380px', '230px'],
+            content: content,
+            btn: [options.btn, '关闭'],
+            yes: function(index){
+                var params = {
+                    _method: options._method,
+                    id: options.id,
+                    name: $("#config-name-add").val(),
+                    value: $("#config-value").val()
+                };
+                request(options.url, options.method, params, options.msg);
+                layer.close(index);
             },
-            async: false,
+            cancel: function(){}
+        });
+    }
+
+    // 向后台发送请求，增删改查
+    function request(url, method, params, msg) {
+        //loading层
+        layer.msg('配置' + msg + '中', {
+            icon: 16
+            ,shade: 0.01
+        });
+        $.ajax({
+            url:ctx + url,
+            type:method,
+            dataType:'json',
+            data: params,
             success:function(data){
-                flag = data;
+                if (data) {
+                    refresh();
+                    layer.msg(msg + "成功！");
+                } else {
+                    layer.msg(msg + "失败！")
+                }
+                layer.closeAll('loading');
             },
             error() {
-                flag = false;
+                layer.msg(msg + "失败！");
+                layer.closeAll('loading');
             }
         });
-        return flag;
     }
 });
 </script>

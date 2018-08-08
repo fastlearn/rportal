@@ -1,6 +1,7 @@
 package com.renguangli.rportal.bean;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Config
@@ -20,6 +21,8 @@ public class Config implements Serializable{
 
     private String description;
 
+    private LocalDateTime updateDatetime;
+
     public Config() {}
 
     public Config(String name, String value) {
@@ -27,11 +30,12 @@ public class Config implements Serializable{
         this.value = value;
     }
 
-    public Config(Integer id, String name, String value, String description) {
+    public Config(Integer id, String name, String value, String description, LocalDateTime updateDatetime) {
         this.id = id;
         this.name = name;
         this.value = value;
         this.description = description;
+        this.updateDatetime = updateDatetime;
     }
 
     public Integer getId() {
@@ -66,6 +70,14 @@ public class Config implements Serializable{
         this.description = description;
     }
 
+    public LocalDateTime getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(LocalDateTime updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
     @Override
     public String toString() {
         return "Config{" +
@@ -73,6 +85,7 @@ public class Config implements Serializable{
                 ", name='" + name + '\'' +
                 ", value='" + value + '\'' +
                 ", description='" + description + '\'' +
+                ", updateDatetime='" + updateDatetime + '\'' +
                 '}';
     }
 

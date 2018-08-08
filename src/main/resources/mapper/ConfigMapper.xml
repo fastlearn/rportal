@@ -45,8 +45,16 @@
         </foreach>
     </delete>
 
+    <insert id="saveConfig">
+        insert into <include refid="table_name" />
+        (name,value,description,update_datetime)
+        values (#{config.name},#{config.value},#{config.description},#{config.updateDatetime})
+    </insert>
+
     <update id="updateConfig">
-        delete from <include refid="table_name"/>
-        where id = #{id}
+        update <include refid="table_name"/>
+        set name = #{config.name},
+        value = #{config.value}
+        where id = #{config.id}
     </update>
 </mapper>

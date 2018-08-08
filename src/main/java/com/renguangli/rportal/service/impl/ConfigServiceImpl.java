@@ -2,11 +2,11 @@ package com.renguangli.rportal.service.impl;
 
 import com.renguangli.rportal.bean.Config;
 import com.renguangli.rportal.mapper.ConfigMapper;
-import com.renguangli.rportal.mapper.UserMapper;
 import com.renguangli.rportal.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -33,6 +33,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public List<Config> listConfig(Config config, int page, int limit) {
+        page = (page - 1) * limit;
         return configMapper.listConfig(config, page, limit);
     }
 
@@ -52,9 +53,15 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public boolean updateConfig(List<Config> configs) {
-        configs.forEach(configMapper::updateConfig);
-        return true;
+    public boolean saveConfig(Config config) {
+        //设置时间
+        config.setUpdateDatetime(LocalDateTime.now());
+        return configMapper.saveConfig(config);
+    }
+
+    @Override
+    public boolean updateConfig(Config config) {
+        return configMapper.updateConfig(config);
     }
 
 }

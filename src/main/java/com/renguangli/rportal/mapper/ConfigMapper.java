@@ -13,11 +13,13 @@ import java.util.List;
  */
 public interface ConfigMapper {
 
-    boolean save(Config config);
-
     Config getConfig(@Param("name") String name);
 
     List<Config> listConfig(@Param("config") Config config, @Param("page") int page, @Param("limit") int limit);
+
+    int countConfig(@Param("config") Config config);
+
+    boolean saveConfig(@Param("config") Config config);
 
     boolean deleteConfig(@Param("id") String id);
 
@@ -25,5 +27,4 @@ public interface ConfigMapper {
 
     boolean updateConfig(@Param("config") Config config);
 
-    int countConfig(@Param("config") Config config);
 }

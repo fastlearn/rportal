@@ -1,15 +1,11 @@
 package com.renguangli.rportal.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.renguangli.rportal.bean.Config;
 import com.renguangli.rportal.bean.Result;
 import com.renguangli.rportal.service.ConfigService;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,9 +22,19 @@ public class ConfigController {
 
     @GetMapping("/configs")
     public Result listConfig(Config config, int page, int limit) {
-        List<Config> data = configService.listConfig(config, page - 1, limit);
+        List<Config> data = configService.listConfig(config, page, limit);
         int count = configService.countConfig(config);
         return new Result(data, count);
+    }
+
+    @PostMapping("/config")
+    public boolean saveConfig(Config config) {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return configService.saveConfig(config);
     }
 
     @DeleteMapping("/config/{id}")
@@ -44,14 +50,8 @@ public class ConfigController {
         return configService.batchDeleteConfig(ids);
     }
 
-    @PostMapping("/system")
-    public boolean updateConfig(String params) {
-        if (StringUtils.isEmpty(params)) {
-            return false;
-        }
-        JSONObject jsonObject = JSON.parseObject(params);
-        ArrayList<Config> configs = new ArrayList<>();
-        jsonObject.forEach((key, value) -> configs.add(new Config(key, value.toString())));
-        return configService.updateConfig(configs);
+    @PutMapping("/config")
+    public boolean updateConfig(Config config) {
+        return configService.updateConfig(config);
     }
 }
