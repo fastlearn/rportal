@@ -77,7 +77,7 @@ layui.use(['table', "element", "jquery"], function(){
 
         if(layEvent === 'del'){ //删除
             layer.confirm('你确定要删除配置[' + data.name + ']么', function(index){
-                request("config/" + data.id, "POST", {_method: "DELETE"}, "删除");
+                request("config/" + data.id, "DELETE", {}, "删除");
                 layer.close(index);
             });
         } else if(layEvent === 'edit'){ //编辑

@@ -20,7 +20,7 @@ public interface PermissionService {
 
     boolean savePermission(Permission permission);
 
-    boolean deletePermission(Integer id);
+    boolean deletePermission(Integer permissionId);
 
-
+    boolean batchDeletePermission(Integer[] permissionIds);
 }

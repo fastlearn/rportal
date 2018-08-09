@@ -38,6 +38,12 @@
         </if>
     </select>
 
+    <insert id="save">
+        insert into <include refid="table_name" />
+        (name,value,description,update_datetime)
+        values (#{pojo.name},#{pojo.value},#{pojo.description},#{pojo.updateDatetime})
+    </insert>
+
     <delete id="delete">
         delete from <include refid="table_name"/>
         where id = #{id}
@@ -50,12 +56,6 @@
             #{id}
         </foreach>
     </delete>
-
-    <insert id="save">
-        insert into <include refid="table_name" />
-        (name,value,description,update_datetime)
-        values (#{pojo.name},#{pojo.value},#{pojo.description},#{pojo.updateDatetime})
-    </insert>
 
     <update id="update">
         update <include refid="table_name"/>
