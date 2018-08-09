@@ -1,7 +1,7 @@
 package com.renguangli.rportal.controller;
 
-import com.renguangli.rportal.bean.Permission;
-import com.renguangli.rportal.bean.Result;
+import com.renguangli.rportal.pojo.Permission;
+import com.renguangli.rportal.pojo.Result;
 import com.renguangli.rportal.service.PermissionService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/permission")
-    public boolean deletePermission(Permission permission) {
-        return permissionService.deletePermission(permission);
+    public boolean deletePermission(Integer id) {
+        return permissionService.deletePermission(id);
     }
 }

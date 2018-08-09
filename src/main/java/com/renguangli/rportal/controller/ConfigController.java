@@ -1,7 +1,7 @@
 package com.renguangli.rportal.controller;
 
-import com.renguangli.rportal.bean.Config;
-import com.renguangli.rportal.bean.Result;
+import com.renguangli.rportal.pojo.Config;
+import com.renguangli.rportal.pojo.Result;
 import com.renguangli.rportal.service.ConfigService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +33,7 @@ public class ConfigController {
     }
 
     @DeleteMapping("/config/{id}")
-    public boolean deleteConfig(@PathVariable String id) {
+    public boolean deleteConfig(@PathVariable Integer id) {
         return configService.deleteConfig(id);
     }
 

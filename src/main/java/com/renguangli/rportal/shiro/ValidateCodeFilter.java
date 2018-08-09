@@ -1,15 +1,15 @@
 package com.renguangli.rportal.shiro;
 
-import com.renguangli.rportal.RportalApplication;
-import com.renguangli.rportal.bean.Config;
+import com.renguangli.rportal.pojo.Config;
 import com.renguangli.rportal.mapper.ConfigMapper;
+import com.renguangli.rportal.util.WebUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class ValidateCodeFilter extends AccessControlFilter {
 
@@ -32,11 +32,14 @@ public class ValidateCodeFilter extends AccessControlFilter {
     }
 
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object mappedValue) throws Exception {
-        ConfigMapper configMapper = RportalApplication.ctx.getBean("configMapper", ConfigMapper.class);
-        Config config = configMapper.getConfig("validateCodeEnabled");
-        if (!StringUtils.isEmpty(config)) {
-            validateCodeEnabled = config.getValue();
-        }
+        ConfigMapper configMapper = WebUtils.getApplicationContext().getBean("configMapper", ConfigMapper.class);
+        List<Config> configs = configMapper.list();
+        configs.forEach(config -> {
+            if ("validateCodeEnabled".equals(config.getName())) {
+                validateCodeEnabled = config.getValue();
+            }
+        });
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
         // 1、设置验证码是否开启属性，页面可以根据该属性来决定是否显示验证码

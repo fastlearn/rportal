@@ -1,6 +1,6 @@
 package com.renguangli.rportal.service;
 
-import com.renguangli.rportal.bean.Permission;
+import com.renguangli.rportal.pojo.Permission;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface PermissionService {
 
     boolean savePermission(Permission permission);
 
-    boolean deletePermission(Permission permission);
+    boolean deletePermission(Integer id);
 
 
 }

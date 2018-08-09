@@ -1,6 +1,6 @@
 package com.renguangli.rportal.service.impl;
 
-import com.renguangli.rportal.bean.User;
+import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.mapper.UserMapper;
 import com.renguangli.rportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package com.renguangli.rportal.service.impl;
 
-import com.renguangli.rportal.RportalApplication;
-import com.renguangli.rportal.bean.Permission;
+import com.renguangli.rportal.pojo.Permission;
 import com.renguangli.rportal.service.PermissionService;
 import com.renguangli.rportal.service.ShiroService;
+import com.renguangli.rportal.util.WebUtils;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
@@ -23,13 +23,11 @@ import java.util.Map;
 @Service("shiroService")
 public class ShiroServiceImpl implements ShiroService {
 
-    private static Object lock = new Object();
-
     @Resource
     private PermissionService permissionService;
 
     public synchronized void updateFilterChainDefinitionMap() {
-        AbstractShiroFilter shiroFilter = RportalApplication.ctx.getBean("shiroFilter", AbstractShiroFilter.class);
+        AbstractShiroFilter shiroFilter = WebUtils.getApplicationContext().getBean("shiroFilter", AbstractShiroFilter.class);
         // 获取过滤管理器
         PathMatchingFilterChainResolver filterChainResolver = (PathMatchingFilterChainResolver) shiroFilter.getFilterChainResolver();
         DefaultFilterChainManager manager = (DefaultFilterChainManager) filterChainResolver.getFilterChainManager();

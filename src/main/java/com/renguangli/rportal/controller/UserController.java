@@ -1,6 +1,6 @@
 package com.renguangli.rportal.controller;
 
-import com.renguangli.rportal.bean.User;
+import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.service.UserService;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
 package com.renguangli.rportal.mapper;
 
-import com.renguangli.rportal.bean.Config;
+import com.renguangli.rportal.pojo.Config;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,20 +11,12 @@ import java.util.List;
  * @author renguangli 2018/8/1 10:19
  * @since JDK 1.8
  */
-public interface ConfigMapper {
+public interface ConfigMapper extends BaseMapper<Config, Integer> {
 
-    Config getConfig(@Param("name") String name);
+    Config getConfig(@Param("pojo") Config config);
 
-    List<Config> listConfig(@Param("config") Config config, @Param("page") int page, @Param("limit") int limit);
+    List<Config> listConfig(@Param("pojo") Config config, @Param("page") int page, @Param("limit") int limit);
 
-    int countConfig(@Param("config") Config config);
-
-    boolean saveConfig(@Param("config") Config config);
-
-    boolean deleteConfig(@Param("id") String id);
-
-    boolean batchDeleteConfig(@Param("ids") Integer[] ids);
-
-    boolean updateConfig(@Param("config") Config config);
+    int countConfig(@Param("pojo") Config config);
 
 }

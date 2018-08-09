@@ -1,25 +1,15 @@
 package com.renguangli.rportal.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.renguangli.rportal.bean.User;
+import com.renguangli.rportal.pojo.Config;
+import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.service.ConfigService;
 import com.renguangli.rportal.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,6 +47,8 @@ public class PageViewController {
 
     @GetMapping("/pageView")
     public String enterBackend(Model model) {
+        Config config = configService.getConfig(new Config("siteName"));
+        model.addAttribute("siteName", config.getValue());
         return "backend/index";
     }
 
@@ -82,10 +74,8 @@ public class PageViewController {
         return pageViews.get(pageName);
     }
 
-    @Autowired
-    private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-    @PostConstruct
+/*    @PostConstruct
     public void list() {
         List<HashMap<String, String>> urlList = new ArrayList<HashMap<String, String>>();
 
@@ -102,12 +92,12 @@ public class PageViewController {
             //hashMap.put("method", method.getMethod().getName()); // 方法名
             RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
             //String type = methodsCondition.toString();
-            /*if (type.startsWith("[") && type.endsWith("]")) {
+            *//*if (type.startsWith("[") && type.endsWith("]")) {
                 type = type.substring(1, type.length() - 1);
                 hashMap.put("type", type); // 方法名
-            }*/
+            }*//*
             urlList.add(hashMap);
         }
         System.out.println(JSON.toJSONString(urlList));
-    }
+    }*/
 }

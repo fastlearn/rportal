@@ -18,10 +18,8 @@ import org.springframework.context.ApplicationContext;
 @MapperScan(basePackages = {"com.renguangli.rportal.mapper"})
 public class RportalApplication extends SpringBootServletInitializer {
 
-    public static ApplicationContext ctx;
-
 	public static void main(String[] args) {
-        ctx = SpringApplication.run(RportalApplication.class, args);
+        SpringApplication.run(RportalApplication.class, args);
     }
 
     /**

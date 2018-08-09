@@ -1,6 +1,6 @@
 package com.renguangli.rportal.service.impl;
 
-import com.renguangli.rportal.bean.Config;
+import com.renguangli.rportal.pojo.Config;
 import com.renguangli.rportal.mapper.ConfigMapper;
 import com.renguangli.rportal.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,8 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Config getConfig(String name) {
-        return configMapper.getConfig(name);
+    public Config getConfig(Config config) {
+        return configMapper.getConfig(config);
     }
 
     @Override
@@ -43,25 +43,25 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public boolean deleteConfig(String id) {
-        return configMapper.deleteConfig(id);
+    public boolean deleteConfig(Integer id) {
+        return configMapper.delete(id);
     }
 
     @Override
     public boolean batchDeleteConfig(Integer[] ids) {
-        return configMapper.batchDeleteConfig(ids);
+        return configMapper.batchDelete(ids);
     }
 
     @Override
     public boolean saveConfig(Config config) {
         //设置时间
         config.setUpdateDatetime(LocalDateTime.now());
-        return configMapper.saveConfig(config);
+        return configMapper.save(config);
     }
 
     @Override
     public boolean updateConfig(Config config) {
-        return configMapper.updateConfig(config);
+        return configMapper.update(config);
     }
 
 }

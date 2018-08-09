@@ -1,6 +1,6 @@
 package com.renguangli.rportal.service.impl;
 
-import com.renguangli.rportal.bean.Permission;
+import com.renguangli.rportal.pojo.Permission;
 import com.renguangli.rportal.mapper.PermissionMapper;
 import com.renguangli.rportal.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<Permission> listPermission() {
-        return permissionMapper.listAllPermission();
+        return permissionMapper.list();
     }
 
     @Override
@@ -46,8 +46,8 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public boolean deletePermission(Permission permission) {
-        return permissionMapper.deletePermission(permission);
+    public boolean deletePermission(Integer id) {
+        return permissionMapper.delete(id);
     }
 
 }

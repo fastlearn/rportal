@@ -1,4 +1,4 @@
-package com.renguangli.rportal.bean;
+package com.renguangli.rportal.pojo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -25,9 +25,8 @@ public class Config implements Serializable{
 
     public Config() {}
 
-    public Config(String name, String value) {
+    public Config(String name) {
         this.name = name;
-        this.value = value;
     }
 
     public Config(Integer id, String name, String value, String description, LocalDateTime updateDatetime) {

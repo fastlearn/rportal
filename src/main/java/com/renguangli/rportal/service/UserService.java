@@ -1,6 +1,6 @@
 package com.renguangli.rportal.service;
 
-import com.renguangli.rportal.bean.User;
+import com.renguangli.rportal.pojo.User;
 
 import java.util.List;
 import java.util.Set;

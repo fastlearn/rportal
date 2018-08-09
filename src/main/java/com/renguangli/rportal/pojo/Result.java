@@ -1,4 +1,4 @@
-package com.renguangli.rportal.bean;
+package com.renguangli.rportal.pojo;
 
 public class Result {
 

@@ -1,6 +1,6 @@
 package com.renguangli.rportal.service;
 
-import com.renguangli.rportal.bean.Config;
+import com.renguangli.rportal.pojo.Config;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ConfigService {
 
-    Config getConfig(String name);
+    Config getConfig(Config config);
 
     List<Config> listConfig(Config config, int page, int limit);
 
@@ -22,7 +22,7 @@ public interface ConfigService {
 
     boolean updateConfig(Config config);
 
-    boolean deleteConfig(String id);
+    boolean deleteConfig(Integer id);
 
     boolean batchDeleteConfig(Integer[] ids);
 }

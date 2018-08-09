@@ -1,6 +1,6 @@
 package com.renguangli.rportal.shiro;
 
-import com.renguangli.rportal.bean.User;
+import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

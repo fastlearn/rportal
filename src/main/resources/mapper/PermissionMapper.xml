@@ -5,8 +5,8 @@
 
     <sql id="table_name">rportal_permission</sql>
 
-    <select id="listAllPermission" resultType="Permission">
-        select permission_id permissionId,url,permission,description,sort
+    <select id="list" resultType="Permission">
+        select url,permission
         from <include refid="table_name" />
         order by sort
     </select>
@@ -15,8 +15,8 @@
         select permission_id permissionId,url,permission,description,sort
         from <include refid="table_name" />
         where 1=1
-        <if test="permission.url != null and permission.url != ''">
-          and url = #{permission.url}
+        <if test="pojo.url != null and pojo.url != ''">
+          and url = #{pojo.url}
         </if>
         order by sort
         limit #{page}, #{limit}
@@ -26,21 +26,21 @@
         select count(*)
         from <include refid="table_name" />
         where 1=1
-        <if test="permission.url != null and permission.url != ''">
-          and url = #{permission.url}
+        <if test="pojo.url != null and pojo.url != ''">
+          and url = #{pojo.url}
         </if>
     </select>
 
-    <insert id="savePermission">
+    <insert id="save">
         insert into <include refid="table_name" />
-          (url,permission)
+          (url,pojo)
         values
-          (#{permission.url},#{permission.permission})
+          (#{pojo.url},#{pojo.permission})
     </insert>
 
-    <insert id="deletePermission">
+    <delete id="delete">
         delete from <include refid="table_name" />
-        where permission_id = #{permission.permissionId}
-    </insert>
+        where permission_id = #{pojo.permissionId}
+    </delete>
 
 </mapper>

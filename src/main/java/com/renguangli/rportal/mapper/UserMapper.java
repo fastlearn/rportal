@@ -1,6 +1,6 @@
 package com.renguangli.rportal.mapper;
 
-import com.renguangli.rportal.bean.User;
+import com.renguangli.rportal.pojo.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

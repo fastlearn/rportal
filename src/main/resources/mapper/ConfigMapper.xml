@@ -8,17 +8,23 @@
     <sql id="table_name">rportal_config</sql>
 
     <select id="getConfig" resultType="Config">
-        select id,name,value,description
-        from <include refid="table_name"/>
-        where name = #{name}
+        select name,value from <include refid="table_name"/>
+        where 1 = 1
+        <if test="pojo.name != null and pojo.name != ''">
+            and name = #{pojo.name}
+        </if>
+    </select>
+
+    <select id="list" resultType="Config">
+        select name,value from <include refid="table_name"/>
     </select>
 
     <select id="listConfig" resultType="Config">
         select id,name,value,description
         from <include refid="table_name"/>
         where 1=1
-        <if test="config.name != null and config.name != ''">
-            and name like concat(#{config.name},'%')
+        <if test="pojo.name != null and pojo.name != ''">
+            and name like concat(#{pojo.name},'%')
         </if>
         limit #{page},#{limit}
     </select>
@@ -27,17 +33,17 @@
         select count(*)
         from <include refid="table_name"/>
         where 1=1
-        <if test="config.name != null and config.name != ''">
-            and name like concat(#{config.name},'%')
+        <if test="pojo.name != null and pojo.name != ''">
+            and name like concat(#{pojo.name},'%')
         </if>
     </select>
 
-    <delete id="deleteConfig">
+    <delete id="delete">
         delete from <include refid="table_name"/>
         where id = #{id}
     </delete>
 
-    <delete id="batchDeleteConfig">
+    <delete id="batchDelete">
         delete from <include refid="table_name"/>
         where id in
         <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
@@ -45,17 +51,18 @@
         </foreach>
     </delete>
 
-    <insert id="saveConfig">
+    <insert id="save">
         insert into <include refid="table_name" />
         (name,value,description,update_datetime)
-        values (#{config.name},#{config.value},#{config.description},#{config.updateDatetime})
+        values (#{pojo.name},#{pojo.value},#{pojo.description},#{pojo.updateDatetime})
     </insert>
 
-    <update id="updateConfig">
+    <update id="update">
         update <include refid="table_name"/>
-        set name = #{config.name},
-        value = #{config.value},
-        description = #{config.description}
-        where id = #{config.id}
+        set name = #{pojo.name},
+        value = #{pojo.value},
+        description = #{pojo.description}
+        where id = #{pojo.id}
     </update>
+
 </mapper>
