@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ConfigService {
 
-    Config getConfig(Config config);
+    String getConfig(String name);
 
     List<Config> listConfig(Config config, int page, int limit);
 

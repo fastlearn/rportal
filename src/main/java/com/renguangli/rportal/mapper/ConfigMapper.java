@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface ConfigMapper extends BaseMapper<Config, Integer> {
 
-    Config getConfig(@Param("pojo") Config config);
+    String getConfig(@Param("name") String name);
 
     List<Config> listConfig(@Param("pojo") Config config, @Param("page") int page, @Param("limit") int limit);
 

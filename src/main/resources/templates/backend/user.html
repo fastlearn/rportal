@@ -21,8 +21,10 @@
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">添加</button>
+                        <input id="username" type="text" class="layui-input search-input" placeholder="请输入关键字" />
+                        <button class="layui-btn layui-btn-normal layui-btn-sm" id="query">查询</button>
+                        <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">批量删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="add">添加</button>
                     </div>
                     <table id="user" lay-filter="test"></table>
                 </div>
@@ -81,23 +83,21 @@ layui.use(['table', "element", "jquery"], function(){
             //do somehing
         } else if(layEvent === 'lock'){ //锁定
             layer.confirm('你确定要锁定用户[' + obj.data.username + ']么', function(index){
-                if (updateUser(obj.data, 1)) {
-                    tableIns.reload();
-                    layer.close(index);
-                    layer.msg("锁定成功！")
-                } else {
-                    layer.msg("锁定失败！")
-                }
+                var params = {
+                    _method: "PUT",
+                    userId: data.userId,
+                    locked: 1
+                };
+                request("user", "POST", params, "锁定");
             });
-        } else if(layEvent === 'unlock'){ //解锁
+        } else if(layEvent === 'unlock'){ //锁定
             layer.confirm('你确定要解锁用户[' + obj.data.username + ']么', function(index){
-                if (updateUser(obj.data, 0)) {
-                    tableIns.reload();
-                    layer.close(index);
-                    layer.msg("解锁成功！")
-                } else {
-                    layer.msg("解锁失败！")
-                }
+                var params = {
+                    _method: "PUT",
+                    userId: data.userId,
+                    locked: 0
+                };
+                request("user", "POST", params, "解锁");
             });
         }
     });
@@ -123,6 +123,73 @@ layui.use(['table', "element", "jquery"], function(){
             }
         });
         return flag;
+    }
+
+    // 重新加载数据
+    function refresh() {
+        options.where.name = $("#config-name").val();
+        tableIns.reload(options);
+    }
+
+    $("#add").click(function () {
+        var options = {
+            title: "添加配置",
+            btn: "保存",
+            url: "config",
+            method: "POST",
+            _method: "",
+            msg: "添加",
+            name: "",
+            value: "",
+            description: ""
+        };
+        layerAlert(options);
+    });
+
+    $("#del").on("click", function () {
+        var checkStatus = table.checkStatus('config'); //test即为基础参数id对应的值
+        if (checkStatus.data.length === 0) {
+            layer.msg("未选中数据行");
+        } else {
+            var ids = [];
+            $.each(checkStatus.data, function (i, config) {
+                ids.push(config.id);
+            });
+            layer.confirm('真的删除行么', function(index){
+                var params = {_method: "DELETE", ids:ids};
+                request("configs", "POST", params, "删除");
+                layer.close(index);
+            });
+        }
+        // console.log(checkStatus.isAll ) //表格是否全选
+    });
+
+    // 向后台发送请求，增删改查
+    function request(url, method, params, msg) {
+        //loading层
+        layer.msg('配置' + msg + '中', {
+            icon: 16
+            ,shade: 0.01
+        });
+        $.ajax({
+            url:ctx + url,
+            type:method,
+            dataType:'json',
+            data: params,
+            success:function(data){
+                if (data) {
+                    refresh();
+                    layer.msg(msg + "成功！");
+                } else {
+                    layer.msg(msg + "失败！")
+                }
+                layer.closeAll('loading');
+            },
+            error() {
+                layer.msg(msg + "失败！");
+                layer.closeAll('loading');
+            }
+        });
     }
 });
 

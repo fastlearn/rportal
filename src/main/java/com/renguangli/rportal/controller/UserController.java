@@ -21,12 +21,13 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public Map<String, Object> listUser(User user) {
+    public Map<String, Object> listUser(User user, int page, int limit) {
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);
         result.put("count", 5);
         result.put("msg", "获取用户信息成功");
-        result.put("data", userService.listUser(user));
+        result.put("data", userService.listUser(user, page, limit));
+        int count = userService.countUser(user);
         return result;
     }
 
@@ -38,6 +39,11 @@ public class UserController {
     @DeleteMapping("/user/{userId}")
     public boolean deleteUser(@PathVariable("userId") Integer userId) {
         return userService.deleteUser(userId);
+    }
+
+    @DeleteMapping("/users")
+    public boolean batchDeleteUser(@PathVariable("userIds[]") Integer[] userIds) {
+        return userService.batchDeleteUser(userIds);
     }
 
     @PutMapping("/user")

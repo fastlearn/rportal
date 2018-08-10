@@ -70,6 +70,7 @@ public class LoginController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
         CreateImageCode validateCode = new CreateImageCode(100,37,4,10);
+        //将验证码放入session
         session.setAttribute("validateCode", validateCode.getCode());
         validateCode.write(response.getOutputStream());
     }

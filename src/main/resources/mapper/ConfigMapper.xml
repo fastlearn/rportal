@@ -7,11 +7,11 @@
 
     <sql id="table_name">rportal_config</sql>
 
-    <select id="getConfig" resultType="Config">
-        select name,value from <include refid="table_name"/>
+    <select id="getConfig" resultType="string">
+        select value from <include refid="table_name"/>
         where 1 = 1
-        <if test="pojo.name != null and pojo.name != ''">
-            and name = #{pojo.name}
+        <if test="name != null and name != ''">
+            and name = #{name}
         </if>
     </select>
 
@@ -20,7 +20,7 @@
     </select>
 
     <select id="listConfig" resultType="Config">
-        select id,name,value,description
+        select id,name,value,description,update_datetime updateDatetime
         from <include refid="table_name"/>
         where 1=1
         <if test="pojo.name != null and pojo.name != ''">

@@ -47,8 +47,8 @@ public class PageViewController {
 
     @GetMapping("/pageView")
     public String enterBackend(Model model) {
-        Config config = configService.getConfig(new Config("siteName"));
-        model.addAttribute("siteName", config.getValue());
+        String siteName = configService.getConfig("siteName");
+        model.addAttribute("siteName", siteName);
         return "backend/index";
     }
 

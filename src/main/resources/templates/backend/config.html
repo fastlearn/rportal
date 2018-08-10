@@ -8,14 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
     <link rel="stylesheet" th:href="@{/static/lib/admin.css}" media="all">
-    <style>
-        .config-input {
-            width: auto;
-            height: 30px;
-            margin-right: 10px;
-            display: inline;
-        }
-    </style>
 </head>
 <body>
 <div class="layui-fluid">
@@ -27,7 +19,7 @@
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div style="margin-bottom: 10px;">
-                        <input id="config-name" type="text" class="layui-input config-input" placeholder="请输入关键字" />
+                        <input id="config-name" type="text" class="layui-input search-input " placeholder="请输入关键字" />
                         <button class="layui-btn layui-btn-normal layui-btn-sm" id="query">查询</button>
                         <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">批量删除</button>
                         <button class="layui-btn layui-btn-primary layui-btn-sm" id="add">添加</button>
@@ -50,6 +42,7 @@ layui.use(['table', "element", "jquery"], function(){
         {"field": "name", "title": "配置", "width": 200},
         {"field": "value", "title": "配置信息", "width": 200},
         {"field": "description", "title": "描述"},
+        {"field": "updateDatetime", "title": "更新时间"},
         {"field": "update", "title": "操作", toolbar: '#toolbar'}
     ];
     var options = {

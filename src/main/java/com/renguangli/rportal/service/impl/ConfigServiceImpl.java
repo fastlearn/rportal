@@ -27,8 +27,8 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Config getConfig(Config config) {
-        return configMapper.getConfig(config);
+    public String getConfig(String name) {
+        return configMapper.getConfig(name);
     }
 
     @Override

@@ -12,19 +12,15 @@ import java.util.Set;
  * @author renguangli 2018/8/2 14:34
  * @since JDK 1.8
  */
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User, Integer> {
 
-    User getUser(@Param("user")User user);
+    User getUser(@Param("pojo")User user);
 
-    List<User> listUser(@Param("user")User user);
+    List<User> listUser(@Param("pojo") User user, @Param("page") int page, @Param("limit") int limit);
+
+    int countUser(@Param("pojo") User user);
 
     Set<String> listRole(@Param("username") String username);
 
     Set<String> listUrl(@Param("username") String username);
-
-    boolean saveUser(User user);
-
-    boolean deleteUser(@Param("userId") Integer userId);
-
-    boolean updateUser(@Param("user") User user);
 }

@@ -15,7 +15,7 @@ public interface UserService {
 
     User getUser(User user);
 
-    List<User> listUser(User user);
+    List<User> listUser(User user, int page, int limit);
 
     Set<String> listRole(String username);
 
@@ -26,4 +26,9 @@ public interface UserService {
     boolean deleteUser(Integer userId);
 
     boolean updateUser(User user);
+
+    int countUser(User user);
+
+    boolean batchDeleteUser(Integer[] userIds);
+
 }

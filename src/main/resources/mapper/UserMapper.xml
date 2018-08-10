@@ -17,8 +17,8 @@
         select <include refid="cols"/>
         from <include refid="table_name" />
         where 1=1
-        <if test="user.username != null and user.username != ''">
-            and username = #{user.username}
+        <if test="pojo.username != null and pojo.username != ''">
+            and username = #{pojo.username}
         </if>
     </select>
 
@@ -26,39 +26,68 @@
         select <include refid="cols"/>
         from <include refid="table_name" />
         where 1=1
-        <if test="user.username != null and user.username != ''">
-            and username = #{user.username}
+        <if test="pojo.username != null and pojo.username != ''">
+            and username = #{pojo.username}
+        </if>
+        limit #{page},#{limit}
+    </select>
+
+    <select id="countUser" resultType="int">
+        select count(*)
+        from <include refid="table_name" />
+        where 1=1
+        <if test="pojo.username != null and pojo.username != ''">
+            and username = #{pojo.username}
         </if>
     </select>
 
-    <delete id="deleteUser">
-        delete from <include refid="table_name" />
-        where user_id = #{userId}
+    <delete id="save">
+        insert into <include refid="table_name"/>
+          ( <include refid="table_name"/> )
+        values
+          (
+            #{pojo.username}, #{pojo.password},#{pojo.salt},#{pojo.salt},#{pojo.expired},
+            #{pojo.name},#{pojo.phoneNumber},#{pojo.email},#{pojo.createDatetime},
+            #{pojo.updateDatetime},#{pojo.passwordUpdateDatetime}
+          )
     </delete>
 
-    <update id="updateUser">
+    <delete id="delete">
+        delete from <include refid="table_name" />
+        where user_id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        delete from <include refid="table_name" />
+        where user_id in
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
         update <include refid="table_name"/>
         <set>
-            <if test="user.username != null and user.username">
-                username = #{user.username},
+            <if test="pojo.username != null and pojo.username">
+                username = #{pojo.username},
             </if>
-            <if test="user.password != null and user.password">
-                password = #{user.password},
+            <if test="pojo.password != null and pojo.password">
+                password = #{pojo.password},
             </if>
-            <if test="user.locked != null">
-                locked = #{user.locked},
+            <if test="pojo.locked != null">
+                locked = #{pojo.locked},
             </if>
-            <if test="user.name != null and user.name">
-                name = #{user.name},
+            <if test="pojo.name != null and pojo.name">
+                name = #{pojo.name},
             </if>
-            <if test="user.phoneNumber != null and user.phoneNumber">
-                phone_number = #{user.phoneNumber},
+            <if test="pojo.phoneNumber != null and pojo.phoneNumber">
+                phone_number = #{pojo.phoneNumber},
             </if>
-            <if test="user.email != null and user.email">
-                email = #{user.email},
+            <if test="pojo.email != null and pojo.email">
+                email = #{pojo.email},
             </if>
         </set>
-        where user_id = #{user.userId}
+        where user_id = #{pojo.userId}
     </update>
 
     <select id="listRole" resultType="String">
