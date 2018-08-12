@@ -1,9 +1,14 @@
 /** layuiAdmin.std-v1.0.0 LPPL License By http://www.layui.com/admin/ */
 ;layui.define(["laytpl", "layer"], function (e) {
-    var t = layui.jquery, n = layui.laytpl, a = layui.layer, r = layui.setter, o = (layui.device(), layui.hint()),
+    var t = layui.jquery,
+        n = layui.laytpl,
+        a = layui.layer,
+        r = layui.setter,
+        o = (layui.device(), layui.hint()),
         i = function (e) {
             return new d(e)
-        }, s = "LAY_app_body", d = function (e) {
+        },
+        s = "LAY_app_body", d = function (e) {
             this.id = e;
             this.container = t("#" + (e || s))
         };

@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common :: head"></head>
 <head>
-    <meta charset="utf-8">
     <title>权限管理</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
-    <link rel="stylesheet" th:href="@{/static/lib/admin.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/extend/ztree/css/zTreeStyle/zTreeStyle.css}" media="all">
 </head>
 <body>
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">全部权限</li>
+                <li class="layui-this">权限列表</li>
+                <li>权限树</li>
             </ul>
             <div class="layui-tab-content">
+                <!-- 权限列表 -->
                 <div class="layui-tab-item layui-show">
                     <div style="margin-bottom: 10px;">
                         <input id="permission-url" type="text" class="layui-input search-input" placeholder="请输入URL资源" />
@@ -26,21 +24,29 @@
                     </div>
                     <table id="permission" lay-filter="permission"></table>
                 </div>
+                <!-- 权限树 -->
+                <div class="layui-tab-item">
+                    <ul id="permission-tree" class="ztree"></ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script th:src="@{/static/layui/layui.js}"></script>
+<script th:src="@{/lib/jquery-1.4.4.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.core.js}"></script>
+<script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.excheck.js}"></script>
 <script th:inline="javascript">
 var ctx = /*[[@{/}]]*/ "";
-layui.use(['table', "element", "jquery"], function(){
-    var $ = layui.jquery;
+layui.use(['table', 'jquery', "element"], function(){
     var table = layui.table;
+    var $ = layui.jquery;
     var cols = [
         {type:'checkbox'},
         {"field": "permissionId", "title": "ID", "align": "center", "width": 60},
         {"field": "url", "title": "URL资源", "width": 150},
-        {"field": "permission", "title": "权限", "width": 200},
+        {"field": "permission", "title": "权限编码", "width": 120},
+        {"field": "name", "title": "权限", "width": 120},
+        {"field": "parentName", "title": "父权限", "width": 120},
         {"field": "description", "title": "描述"},
         {"field": "sort", "title": "排序", "align": "center", "width": 60},
         {"field": "update", "title": "操作", toolbar: '#toolbar'}
@@ -50,10 +56,15 @@ layui.use(['table', "element", "jquery"], function(){
         elem: '#permission',
         url: ctx + "permissions",
         where: {
-            url: $("#permission-url").val()
+            name: $("#permission-url").val()
         }, //设定异步数据接口的额外参数
-        cols: [cols],
-        page: true
+        done: function (res, curr, count) {
+            loadPermissionTree(res.data);
+        },
+        page: {
+            curr: 1
+        },
+        cols: [cols]
     };
 
     var tableIns = table.render(options);
@@ -112,14 +123,14 @@ layui.use(['table', "element", "jquery"], function(){
 
     // 重新加载数据
     function refresh() {
-        options.where.url = $("#permission-url").val();
+        options.where.name = $("#permission-url").val();
         tableIns.reload(options);
     }
 
     // 向后台发送请求，增删改查
     function request(url, method, params, msg) {
         //loading层
-        layer.msg('资源' + msg + '中', {
+        layer.msg('权限' + msg + '中', {
             icon: 16
             ,shade: 0.01
         });
@@ -144,6 +155,42 @@ layui.use(['table', "element", "jquery"], function(){
         });
     }
 });
+
+</script>
+<script>
+    function loadPermissionTree(zNodes) {
+        var setting = {
+            check: {
+                enable: true,
+                chkboxType: { "Y": "ps", "N": "ps" }
+            },
+            view: {
+                showIcon: false
+            },
+            key: {
+                url: "_url"
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "permissionId",
+                    pIdKey: "parentId"
+                }
+            },
+            callback: {
+                onCheck: onCheck
+            }
+        };
+
+        $.fn.zTree.init($("#permission-tree"), setting, zNodes);
+    }
+
+    function onCheck(event, treeId, treeNode) {
+        var ztree = $.fn.zTree.getZTreeObj(treeId);
+        var checkedNodes = ztree.getCheckedNodes(true);
+        console.log(checkedNodes)
+        console.log(event)
+    }
 </script>
 <script type="text/html" id="toolbar">
     {{#  if(d.permissionId > 3){ }}

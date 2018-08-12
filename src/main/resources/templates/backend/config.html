@@ -6,8 +6,8 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
-    <link rel="stylesheet" th:href="@{/static/lib/admin.css}" media="all">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/style/admin.css}" media="all">
 </head>
 <body>
 <div class="layui-fluid">
@@ -30,13 +30,14 @@
         </div>
     </div>
 </div>
-<script th:src="@{/static/layui/layui.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
-var ctx = /*[[@{/}]]*/ "";
-layui.use(['table', "element", "jquery"], function(){
+var ctx = /*[[@{/}]]*/ ''; //context-path
+layui.config({base: ctx + 'lib/' }); // 静态资源所在路径
+layui.use(['table', "element", "rportal"], function(){
     var $ = layui.jquery;
-    //var element = layui.element;
     var table = layui.table;
+    var rportal = layui.rportal;
     var cols = [
         {type:'checkbox'},
         {"field": "name", "title": "配置", "width": 200},
@@ -51,14 +52,10 @@ layui.use(['table', "element", "jquery"], function(){
         where: {
             name: $("#config-name").val()
         },
-        response: {
-            statusName: 'code', // 数据状态的字段名称，默认：code
-            msgName: 'message', // 状态信息的字段名称，默认：msg
-            countName: 'count', // 数据总数的字段名称，默认：count
-            dataName: 'data' // 数据列表的字段名称，默认：data
+        page: {
+            curr: 1
         },
-        cols: [cols],
-        page: true
+        cols: [cols]
     };
 
     var tableIns = table.render(options);
@@ -70,14 +67,14 @@ layui.use(['table', "element", "jquery"], function(){
 
         if(layEvent === 'del'){ //删除
             layer.confirm('你确定要删除配置[' + data.name + ']么', function(index){
-                request("config/" + data.id, "DELETE", {}, "删除");
+                rportal.request(ctx + "config/" + data.id, "DELETE", {}, "删除");
                 layer.close(index);
             });
         } else if(layEvent === 'edit'){ //编辑
             var options = {
                 title: "更新配置",
                 btn: "更新",
-                url: "config",
+                url: ctx + "config",
                 method: "POST",
                 _method: "PUT",
                 msg: "更新",
@@ -98,7 +95,7 @@ layui.use(['table', "element", "jquery"], function(){
         var options = {
             title: "添加配置",
             btn: "保存",
-            url: "config",
+            url: ctx + "config",
             method: "POST",
             _method: "",
             msg: "添加",
@@ -120,7 +117,7 @@ layui.use(['table', "element", "jquery"], function(){
             });
             layer.confirm('真的删除行么', function(index){
                 var params = {_method: "DELETE", ids:ids};
-                request("configs", "POST", params, "删除");
+                rportal.request(ctx + "configs", "POST", params, "删除");
                 layer.close(index);
             });
         }
@@ -169,38 +166,10 @@ layui.use(['table', "element", "jquery"], function(){
                     value: $("#config-value").val(),
                     description: $("#config-description").val()
                 };
-                request(options.url, options.method, params, options.msg);
+                rportal.request(options.url, options.method, params, options.msg);
                 layer.close(index);
             },
             cancel: function(){}
-        });
-    }
-
-    // 向后台发送请求，增删改查
-    function request(url, method, params, msg) {
-        //loading层
-        layer.msg('配置' + msg + '中', {
-            icon: 16
-            ,shade: 0.01
-        });
-        $.ajax({
-            url:ctx + url,
-            type:method,
-            dataType:'json',
-            data: params,
-            success:function(data){
-                if (data) {
-                    refresh();
-                    layer.msg(msg + "成功！");
-                } else {
-                    layer.msg(msg + "失败！")
-                }
-                layer.closeAll('loading');
-            },
-            error() {
-                layer.msg(msg + "失败！");
-                layer.closeAll('loading');
-            }
         });
     }
 });

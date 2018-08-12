@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.renguangli.rportal.mapper.RoleMapper">
 
-    <select id="listRoles" resultType="Role">
-        select r.role_code
+    <select id="listRole" resultType="Role">
+        select r.role
         from rportal_user u
           left join rportal_user_role ur on u.user_id = ur.role_id
           left join rportal_role r on ur.role_id = r.role_id

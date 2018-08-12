@@ -1,5 +1,7 @@
 package com.renguangli.rportal.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,7 +16,12 @@ public class User implements Serializable{
     private static final long serialVersionUID = -9158393508008723437L;
 
     /**
-     * 账号锁定
+     * 账号正常状态
+     */
+    public static final Integer UNLOCKED = 0;
+
+    /**
+     * 账号锁定状态
      */
     public static final Integer LOCKED = 1;
 
@@ -32,14 +39,16 @@ public class User implements Serializable{
     private Integer locked;
 
     /**
-     * 默认90天过期
+     * 密码过期天数
      */
-    private Integer expired = 90;
+    private Integer expired;
 
     /**
      * 用户真实姓名/昵称
      */
     private String name;
+
+    private Integer sex;
 
     private String phoneNumber;
 
@@ -48,16 +57,19 @@ public class User implements Serializable{
     /**
      * 用户创建日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDatetime;
 
     /**
      * 用户更新日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDatetime;
 
     /**
      * 密码更新日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime passwordUpdateDatetime;
 
     public User() {}
@@ -124,6 +136,14 @@ public class User implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
     }
 
     public String getPhoneNumber() {

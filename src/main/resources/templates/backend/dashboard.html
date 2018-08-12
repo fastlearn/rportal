@@ -6,8 +6,8 @@
     <meta name="renderer" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all"/>
-    <link rel="stylesheet" th:href="@{/static/lib/admin.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/lib/style/admin.css}" media="all"/>
 </head>
 <body>
 <div class="layui-fluid">
@@ -27,29 +27,14 @@
         </div>
     </div>
 </div>
-<script th:src="@{/static/layui/layui.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
-var ctx = /*[[@{/}]]*/ "";
-layui.use(['jquery','element'], function(){
-    $= layui.jquery;
-    var element = layui.element;
-    setInterval(function () {
-        $.ajax({
-            type: "GET",
-            url: ctx + "monitor",
-            dataType: "json",
-            success: function(data){
-                var cpu = data.cpu.toFixed(4) + "%";
-                element.progress('cpu', cpu);
-                var memory = data.memory.toFixed(4) + "%";
-                element.progress('memory', memory);
-            },
-            error: function (e) {
-
-            }
-        });
-    }, 5000);
-});
+var ctx = /*[[@{/}]]*/ ''; //context-path
+layui.config({base: ctx + 'lib/' }); // 静态资源所在路径
+layui.use('dashboard', function () {
+    var dashboard = layui.dashboard;
+    dashboard.monitor(ctx);
+})
 </script>
 </body>
 </html>

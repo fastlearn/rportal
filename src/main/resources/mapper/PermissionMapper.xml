@@ -6,17 +6,19 @@
     <sql id="table_name">rportal_permission</sql>
 
     <select id="list" resultType="Permission">
-        select url,permission
+        select url,group_concat(permission) permission,fixed
         from <include refid="table_name" />
+        group by url
         order by sort
     </select>
 
     <select id="listPermission" resultType="Permission">
-        select permission_id permissionId,url,permission,description,sort
+        select permission_id permissionId,parent_id parentId,
+        url,permission,name,parent_name parentName,description,sort
         from <include refid="table_name" />
         where 1=1
-        <if test="pojo.url != null and pojo.url != ''">
-          and url like concat(#{pojo.url},'%')
+        <if test="pojo.name != null and pojo.name != ''">
+          and url like concat(#{pojo.name},'%')
         </if>
         order by sort
         limit #{page}, #{limit}
@@ -26,16 +28,16 @@
         select count(*)
         from <include refid="table_name" />
         where 1=1
-        <if test="pojo.url != null and pojo.url != ''">
-          and url = #{pojo.url}
+        <if test="pojo.name != null and pojo.name != ''">
+          and url = #{pojo.name}
         </if>
     </select>
 
     <insert id="save">
         insert into <include refid="table_name" />
-          (url,permission)
+          (parent_id,url,name,parent_name,description,sort)
         values
-          (#{pojo.url},#{pojo.permission})
+          (#{pojo.parentId},#{pojo.url},,#{pojo.name},#{pojo.parentName},#{pojo.description},#{pojo.sort})
     </insert>
 
     <delete id="delete">

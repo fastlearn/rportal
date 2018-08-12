@@ -19,7 +19,9 @@ public interface UserService {
 
     Set<String> listRole(String username);
 
-    Set<String> listUrl(String username);
+    Set<String> listPermissionByUsername(String username);
+
+    Set<String> listPermissionByRoles(Set<String> roles);
 
     boolean saveUser(User user);
 

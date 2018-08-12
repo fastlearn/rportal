@@ -1,12 +1,12 @@
 package com.renguangli.rportal.controller;
 
+import com.renguangli.rportal.pojo.Result;
 import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * UserController
@@ -21,14 +21,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public Map<String, Object> listUser(User user, int page, int limit) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("code", 0);
-        result.put("count", 5);
-        result.put("msg", "获取用户信息成功");
-        result.put("data", userService.listUser(user, page, limit));
+    public Result listUser(User user, int page, int limit) {
+        List<User> data = userService.listUser(user, page, limit);
         int count = userService.countUser(user);
-        return result;
+        return new Result(data, count);
     }
 
     @PostMapping("/user")
@@ -42,7 +38,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users")
-    public boolean batchDeleteUser(@PathVariable("userIds[]") Integer[] userIds) {
+    public boolean batchDeleteUser(@RequestParam("userIds[]") Integer[] userIds) {
         return userService.batchDeleteUser(userIds);
     }
 

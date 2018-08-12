@@ -10,23 +10,23 @@ public class Permission {
 
     private Integer permissionId;
 
+    private Integer parentId;
+
     private String url;
 
     private String permission;
 
+    private String name;
+
+    private String parentName;
+
     private String description;
+
+    boolean fixed;
 
     private Integer sort;
 
     public Permission() {}
-
-    public Permission(Integer permissionId, String url, String permission, String description, Integer sort) {
-        this.permissionId = permissionId;
-        this.url = url;
-        this.permission = permission;
-        this.description = description;
-        this.sort = sort;
-    }
 
     public Integer getPermissionId() {
         return permissionId;
@@ -34,6 +34,14 @@ public class Permission {
 
     public void setPermissionId(Integer permissionId) {
         this.permissionId = permissionId;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getUrl() {
@@ -52,12 +60,36 @@ public class Permission {
         this.permission = permission;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isFixed() {
+        return fixed;
+    }
+
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
     }
 
     public Integer getSort() {
@@ -72,9 +104,13 @@ public class Permission {
     public String toString() {
         return "Permission{" +
                 "permissionId=" + permissionId +
+                ", parentId=" + parentId +
                 ", url='" + url + '\'' +
                 ", permission='" + permission + '\'' +
+                ", name='" + name + '\'' +
+                ", parentName='" + parentName + '\'' +
                 ", description='" + description + '\'' +
+                ", fixed='" + fixed + '\'' +
                 ", sort=" + sort +
                 '}';
     }

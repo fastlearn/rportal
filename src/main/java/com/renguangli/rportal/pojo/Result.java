@@ -7,7 +7,7 @@ public class Result {
      */
     private int code;
 
-    private String message = "请求成功！";
+    private String msg = "请求成功！";
 
     private int count;
 
@@ -20,9 +20,9 @@ public class Result {
         this.count = count;
     }
 
-    public Result(int code, String message) {
+    public Result(int code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 
     public int getCode() {
@@ -33,12 +33,12 @@ public class Result {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public int getCount() {
@@ -61,7 +61,7 @@ public class Result {
     public String toString() {
         return "Result{" +
                 "code=" + code +
-                ", message='" + message + '\'' +
+                ", msg='" + msg + '\'' +
                 ", count=" + count +
                 ", data=" + data +
                 '}';

@@ -22,5 +22,9 @@ public interface UserMapper extends BaseMapper<User, Integer> {
 
     Set<String> listRole(@Param("username") String username);
 
-    Set<String> listUrl(@Param("username") String username);
+    Set<String> listPermissionByUsername(@Param("username") String username);
+
+    Set<String> listPermissionByRoles(@Param("roles") Set<String> roles);
+
 }
+

@@ -69,14 +69,30 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSuccessUrl("/"); // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setUnauthorizedUrl("/403"); // 未授权跳转链接;
 
-        // 从数据库中读取拦截链配置
-        Map<String, String> filterChainDefinitionMap = shiroService.getFilterChainDefinitionMap();
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         // 添加自定义过滤器
         Map<String, Filter> filters = new HashMap<>();
         filters.put("authc", new CustomFormAuthenticationFilter());
         filters.put("validateCode", new ValidateCodeFilter());
+        filters.put("perms", new CustomPermissionsAuthorizationFilter());
         shiroFilterFactoryBean.setFilters(filters);
+
+        // 从数据库中读取拦截链配置
+        /*Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/login", "validateCode,authc");
+        filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put("/validateCode", "anon");
+        filterChainDefinitionMap.put("/layui/**", "anon");
+        filterChainDefinitionMap.put("/lib/**", "anon");
+        filterChainDefinitionMap.put("/images/**", "anon");
+        filterChainDefinitionMap.put("/pageView/user", "perms[user:manager]");
+        filterChainDefinitionMap.put("/test/**", "user");
+        filterChainDefinitionMap.put("/**", "authc");*/
+        Map<String, String> filterChainDefinitionMap = shiroService.getFilterChainDefinitionMap();
+        filterChainDefinitionMap.put("/users", "rest[user]");
+        filterChainDefinitionMap.forEach((key, value) -> {
+            System.out.println(key + "=" + value);
+        });
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
 

@@ -1,5 +1,7 @@
 package com.renguangli.rportal.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,6 +23,7 @@ public class Config implements Serializable{
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDatetime;
 
     public Config() {}

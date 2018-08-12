@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
 
 /**
  * ShiroRealm
@@ -29,10 +30,11 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = (String)principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(userService.listRole(username));
-        authorizationInfo.setStringPermissions(userService.listUrl(username));
-        userService.listRole(username).forEach(System.out::println);
-        System.out.println();
+        Set<String> roles = userService.listRole(username);
+        authorizationInfo.setRoles(roles);
+        authorizationInfo.setStringPermissions(userService.listPermissionByRoles(roles));
+        Set<String> permissions = userService.listPermissionByUsername(username);
+        permissions.forEach(authorizationInfo::addStringPermission);
         return authorizationInfo;
     }
 

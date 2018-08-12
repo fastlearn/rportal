@@ -43,9 +43,13 @@ public class ShiroServiceImpl implements ShiroService {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 从数据库获取url权限配置
         List<Permission> permissions = permissionService.listPermission();
-        for (Permission permission : permissions) {
-            filterChainDefinitionMap.put(permission.getUrl(),permission.getPermission());
-        }
+        permissions.forEach(permission -> {
+            String perm = permission.getPermission();
+            if (permission.isFixed()) {
+                perm = "perms[" + perm + "]";
+            }
+            filterChainDefinitionMap.put(permission.getUrl(), perm);
+        });
         return filterChainDefinitionMap;
     }
 }
