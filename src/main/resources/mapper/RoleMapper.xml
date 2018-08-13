@@ -4,10 +4,31 @@
 <mapper namespace="com.renguangli.rportal.mapper.RoleMapper">
 
     <select id="listRole" resultType="Role">
-        select r.role
-        from rportal_user u
-          left join rportal_user_role ur on u.user_id = ur.role_id
-          left join rportal_role r on ur.role_id = r.role_id
-        where u.username = #{username}
+        select role_id roleId,role,name,description,disabled
+        from rportal_role;
     </select>
+    
+    <insert id="save">
+        insert into rportal_role
+          (role,name.desecrption,disabled)
+        values
+          (#{pojo.role},#{pojo.name},#{pojo.description},#{pojo.disabled})
+    </insert>
+    
+    <delete id="delete">
+        delete from rportal_role
+        where role_id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        delete from rportal_role
+        where role_id in 
+        <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        
+    </update>
 </mapper>

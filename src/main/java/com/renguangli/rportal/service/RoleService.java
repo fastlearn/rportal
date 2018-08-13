@@ -1,5 +1,7 @@
 package com.renguangli.rportal.service;
 
+import com.renguangli.rportal.pojo.Role;
+
 import java.util.Set;
 
 /**
@@ -10,5 +12,13 @@ import java.util.Set;
  */
 public interface RoleService {
 
-    Set<String> listRoles(String username);
+    Set<String> listRoles(Role role);
+
+    boolean saveRole(Role role);
+
+    boolean deleteRole(Integer roleId);
+
+    boolean batchDeleteRole(Integer[] roleIds);
+
+    boolean updateRole(Role role);
 }

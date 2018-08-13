@@ -14,17 +14,15 @@ public class Role implements Serializable{
 
     private Integer roleId;
 
-    private String roleCode;
+    private String role;
 
-    private String roleName;
+    private String name;
+
+    private String description;
+
+    private boolean disabled;
 
     public Role() {}
-
-    public Role(Integer roleId, String roleCode, String roleName) {
-        this.roleId = roleId;
-        this.roleCode = roleCode;
-        this.roleName = roleName;
-    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -38,28 +36,46 @@ public class Role implements Serializable{
         this.roleId = roleId;
     }
 
-    public String getRoleCode() {
-        return roleCode;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     @Override
     public String toString() {
         return "Role{" +
                 "roleId=" + roleId +
-                ", roleCode=" + roleCode +
-                ", roleName=" + roleName +
-                "}";
+                ", role='" + role + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", disabled=" + disabled +
+                '}';
     }
 }
