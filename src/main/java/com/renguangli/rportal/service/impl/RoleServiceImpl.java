@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * RoleServiceImpl
@@ -26,8 +26,14 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Set<String> listRoles(Role role) {
-        return roleMapper.listRoles(role);
+    public List<Role> listRole(Role role, int page, int limit){
+        page = (page - 1) * limit;
+        return roleMapper.listRole(role, page, limit);
+    }
+
+    @Override
+    public int countRole(Role role) {
+        return roleMapper.countRole(role);
     }
 
     @Override

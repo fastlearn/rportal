@@ -2,7 +2,6 @@ package com.renguangli.rportal.shiro;
 
 import com.alibaba.fastjson.JSON;
 import com.renguangli.rportal.pojo.Result;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 
 import javax.servlet.ServletRequest;

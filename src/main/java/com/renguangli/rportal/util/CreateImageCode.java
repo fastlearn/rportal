@@ -21,7 +21,7 @@ public class CreateImageCode {
     // 验证码图片Buffer
     private BufferedImage buffImg = null;
 
-    Random random = new Random();
+    private Random random = new Random();
 
     public CreateImageCode() {
         createImage();

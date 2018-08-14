@@ -2,7 +2,7 @@ package com.renguangli.rportal.service;
 
 import com.renguangli.rportal.pojo.Role;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * RoleService
@@ -12,7 +12,9 @@ import java.util.Set;
  */
 public interface RoleService {
 
-    Set<String> listRoles(Role role);
+    List<Role> listRole(Role role, int page, int limit);
+
+    int countRole(Role role);
 
     boolean saveRole(Role role);
 

@@ -2,7 +2,6 @@ package com.renguangli.rportal.shiro;
 
 import com.alibaba.fastjson.JSON;
 import com.renguangli.rportal.pojo.Result;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 
 import javax.servlet.ServletRequest;
@@ -16,7 +15,7 @@ import java.io.IOException;
  */
 public class CustomPermissionsAuthorizationFilter extends PermissionsAuthorizationFilter {
 
-    public CustomPermissionsAuthorizationFilter() {}
+    CustomPermissionsAuthorizationFilter() {}
 
     /**
      * Handles the response when access has been denied.  It behaves as follows:
@@ -38,8 +37,8 @@ public class CustomPermissionsAuthorizationFilter extends PermissionsAuthorizati
      * which implicitly means that the subject is either currently authenticated or they have been remembered via
      * 'remember me' services.
      *
-     * @param request  the incoming <code>ServletRequest</code>
-     * @param response the outgoing <code>ServletResponse</code>
+     * @param servletRequest  the incoming <code>ServletRequest</code>
+     * @param servletResponse the outgoing <code>ServletResponse</code>
      * @return {@code false} always for this implementation.
      * @throws IOException if there is any servlet error.
      */

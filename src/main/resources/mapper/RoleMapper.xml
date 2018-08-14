@@ -5,16 +5,30 @@
 
     <select id="listRole" resultType="Role">
         select role_id roleId,role,name,description,disabled
-        from rportal_role;
+        from rportal_role
+        where 1=1
+        <if test="pojo.name != null and pojo.name != ''">
+            and name like concat(#{pojo.name},'%')
+        </if>
+        limit #{page},#{limit}
+    </select>
+
+    <select id="countRole" resultType="int">
+        select count(*)
+        from rportal_role
+        where 1=1
+        <if test="pojo.name != null and pojo.name != ''">
+            and name like concat(#{pojo.name},'%')
+        </if>
     </select>
     
     <insert id="save">
-        insert into rportal_role
-          (role,name.desecrption,disabled)
+        insert into rportal.rportal_role
+          (role, name, description, disabled)
         values
           (#{pojo.role},#{pojo.name},#{pojo.description},#{pojo.disabled})
     </insert>
-    
+
     <delete id="delete">
         delete from rportal_role
         where role_id = #{id}
@@ -29,6 +43,19 @@
     </delete>
 
     <update id="update">
-        
+        update rportal_role
+        <set>
+            <if test="pojo.role != null and pojo.role">
+                role = #{pojo.role},
+            </if>
+            <if test="pojo.name != null and pojo.name">
+                name = #{pojo.name},
+            </if>
+            <if test="pojo.description != null">
+                description = #{pojo.description},
+            </if>
+                disabled = #{pojo.disabled},
+        </set>
+        where role_id = #{pojo.roleId}
     </update>
 </mapper>

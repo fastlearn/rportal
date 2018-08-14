@@ -1,8 +1,9 @@
 package com.renguangli.rportal.mapper;
 
 import com.renguangli.rportal.pojo.Role;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * RoleMapper
@@ -12,6 +13,7 @@ import java.util.Set;
  */
 public interface RoleMapper extends BaseMapper<Role, Integer> {
 
-    Set<String> listRoles(Role role);
+    List<Role> listRole(@Param("pojo") Role role, @Param("page") int page,  @Param("limit") int limit);
 
+    int countRole(@Param("pojo") Role role);
 }
