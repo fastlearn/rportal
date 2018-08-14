@@ -47,9 +47,13 @@
 <script th:inline="javascript">
 var ctx = /*[[@{/validateCode}]]*/ "";
 //更新验证码
-document.getElementById("validateCode").onclick = function () {
-    this.src= ctx + "?" + new Date().getTime();
-};
+var img = document.getElementById("validateCode");
+if (img) {
+    img.onclick = function () {
+        this.src= ctx + "?" + new Date().getTime();
+    }
+}
+
 </script>
 </body>
 </html>

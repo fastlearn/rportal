@@ -9,10 +9,8 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        //判断是否发生验证异常
-        if (request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME) != null) {
-            return true;
-        }
-        return super.onAccessDenied(request, response);
+        // 如果发生异常，拒绝访问，访问登录页面
+        return request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME) != null
+                || super.onAccessDenied(request, response);// 问发生异常，交给shiro进行登录处理
     }
 }

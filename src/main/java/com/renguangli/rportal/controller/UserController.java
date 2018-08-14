@@ -15,36 +15,41 @@ import java.util.List;
  * @since JDK 1.8
  */
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Resource
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/list")
     public Result listUser(User user, int page, int limit) {
         List<User> data = userService.listUser(user, page, limit);
         int count = userService.countUser(user);
         return new Result(data, count);
     }
 
-    @PostMapping("/user")
-    public boolean saveUser(User user) {
-        return userService.saveUser(user);
+    @PostMapping("/save")
+    public Result saveUser(User user) {
+        boolean flag = userService.saveUser(user);
+        return new Result(0, flag);
     }
 
-    @DeleteMapping("/user/{userId}")
-    public boolean deleteUser(@PathVariable("userId") Integer userId) {
-        return userService.deleteUser(userId);
+    @PostMapping("/delete")
+    public Result deleteUser(Integer userId) {
+        boolean flag = userService.deleteUser(userId);
+        return new Result(0, flag);
     }
 
-    @DeleteMapping("/users")
-    public boolean batchDeleteUser(@RequestParam("userIds[]") Integer[] userIds) {
-        return userService.batchDeleteUser(userIds);
+    @PostMapping("/batchDelete")
+    public Result batchDeleteUser(@RequestParam("userIds[]") Integer[] userIds) {
+        boolean flag = userService.batchDeleteUser(userIds);
+        return new Result(0, flag);
     }
 
-    @PutMapping("/user")
-    public boolean updateUser(User user) {
-        return userService.updateUser(user);
+    @PostMapping("/update")
+    public Result updateUser(User user) {
+        boolean flag = userService.updateUser(user);
+        return new Result(0, flag);
     }
 
 }

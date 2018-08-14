@@ -6,9 +6,8 @@
     <sql id="table_name">rportal_permission</sql>
 
     <select id="list" resultType="Permission">
-        select url,group_concat(permission) permission,fixed
+        select url,permission,fixed
         from <include refid="table_name" />
-        group by url
         order by sort
     </select>
 
@@ -16,7 +15,7 @@
         select permission_id permissionId,parent_id parentId,
         url,permission,name,parent_name parentName,description,sort
         from <include refid="table_name" />
-        where 1=1
+        where 1=1 and fixed = #{pojo.fixed}
         <if test="pojo.name != null and pojo.name != ''">
           and url like concat(#{pojo.name},'%')
         </if>

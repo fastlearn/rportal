@@ -88,10 +88,6 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/test/**", "user");
         filterChainDefinitionMap.put("/**", "authc");*/
         Map<String, String> filterChainDefinitionMap = shiroService.getFilterChainDefinitionMap();
-        filterChainDefinitionMap.put("/users", "rest[user]");
-        filterChainDefinitionMap.forEach((key, value) -> {
-            System.out.println(key + "=" + value);
-        });
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }

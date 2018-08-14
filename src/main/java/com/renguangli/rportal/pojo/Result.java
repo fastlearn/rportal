@@ -4,6 +4,7 @@ public class Result {
 
     /**
      * 0、请求成功
+     * 1003 权限不足
      */
     private int code;
 
@@ -23,6 +24,11 @@ public class Result {
     public Result(int code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    public Result(int code, Object data) {
+        this.code = code;
+        this.data = data;
     }
 
     public int getCode() {

@@ -15,29 +15,33 @@ import java.util.List;
  * @since JDK 1.8
  */
 @RestController
+@RequestMapping("/config")
 public class ConfigController {
 
     @Resource
     private ConfigService configService;
 
-    @GetMapping("/configs")
+    @GetMapping("/list")
     public Result listConfig(Config config, int page, int limit) {
         List<Config> data = configService.listConfig(config, page, limit);
         int count = configService.countConfig(config);
         return new Result(data, count);
     }
 
-    @PostMapping("/config")
+    @PostMapping("/save")
     public boolean saveConfig(Config config) {
         return configService.saveConfig(config);
     }
 
-    @DeleteMapping("/config/{id}")
-    public boolean deleteConfig(@PathVariable Integer id) {
+    @PostMapping("/delete")
+    public boolean deleteConfig(Integer id) {
+        if (id == null) {
+            return false;
+        }
         return configService.deleteConfig(id);
     }
 
-    @DeleteMapping("/configs")
+    @PostMapping("/batchDelete")
     public boolean batchDeleteConfig(@RequestParam(value = "ids[]", required = false) Integer[] ids) {
         if (ids == null || ids.length == 0) {
             return false;
@@ -45,7 +49,7 @@ public class ConfigController {
         return configService.batchDeleteConfig(ids);
     }
 
-    @PutMapping("/config")
+    @PostMapping("/update")
     public boolean updateConfig(Config config) {
         return configService.updateConfig(config);
     }

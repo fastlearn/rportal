@@ -45,11 +45,13 @@ public class ShiroServiceImpl implements ShiroService {
         List<Permission> permissions = permissionService.listPermission();
         permissions.forEach(permission -> {
             String perm = permission.getPermission();
-            if (permission.isFixed()) {
+            if (!permission.isFixed()) {
                 perm = "perms[" + perm + "]";
             }
+            System.out.println(permission.getUrl() + "=" + perm);
             filterChainDefinitionMap.put(permission.getUrl(), perm);
         });
+
         return filterChainDefinitionMap;
     }
 }

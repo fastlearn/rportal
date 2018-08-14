@@ -48,7 +48,7 @@ layui.use(['table', "element", "rportal"], function(){
     ];
     var options = {
         elem: '#config',
-        url: ctx + "configs",
+        url: ctx + "config/list",
         where: {
             name: $("#config-name").val()
         },
@@ -67,7 +67,8 @@ layui.use(['table', "element", "rportal"], function(){
 
         if(layEvent === 'del'){ //删除
             layer.confirm('你确定要删除配置[' + data.name + ']么', function(index){
-                rportal.request(ctx + "config/" + data.id, "DELETE", {}, "删除");
+                var params = {id: data.id};
+                rportal.request(ctx + "config/delete", "DELETE", params, "删除");
                 layer.close(index);
             });
         } else if(layEvent === 'edit'){ //编辑
@@ -95,7 +96,7 @@ layui.use(['table', "element", "rportal"], function(){
         var options = {
             title: "添加配置",
             btn: "保存",
-            url: ctx + "config",
+            url: ctx + "config/save",
             method: "POST",
             _method: "",
             msg: "添加",
@@ -116,8 +117,8 @@ layui.use(['table', "element", "rportal"], function(){
                 ids.push(config.id);
             });
             layer.confirm('真的删除行么', function(index){
-                var params = {_method: "DELETE", ids:ids};
-                rportal.request(ctx + "configs", "POST", params, "删除");
+                var params = {ids:ids};
+                rportal.request(ctx + "config/batchDelete", "POST", params, "删除");
                 layer.close(index);
             });
         }

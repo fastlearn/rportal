@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="common :: head"></head>
 <head>
-    <title>dashboard</title>
+    <title>用户管理</title>
+    <link rel="stylesheet" th:href="@{/lib/extend/ztree/css/zTreeStyle/zTreeStyle.css}" media="all">
 </head>
 <body>
 <div class="layui-fluid">
@@ -56,7 +57,7 @@ layui.use(['table', "element", "jquery"], function(){
     ];
     var options = {
         elem: '#user',
-        url: ctx + 'users',
+        url: ctx + 'user/list',
         where: {
             username: $("#username").val()
         }, //设定异步数据接口的额外参数
@@ -78,20 +79,18 @@ layui.use(['table', "element", "jquery"], function(){
         } else if(layEvent === 'lock'){ //锁定
             layer.confirm('你确定要锁定用户[' + obj.data.username + ']么', function(index){
                 var params = {
-                    _method: "PUT",
                     userId: data.userId,
                     locked: 1
                 };
-                request("user", "POST", params, "锁定");
+                request("user/update", "POST", params, "锁定");
             });
         } else if(layEvent === 'unlock'){ //锁定
             layer.confirm('你确定要解锁用户[' + obj.data.username + ']么', function(index){
                 var params = {
-                    _method: "PUT",
                     userId: data.userId,
                     locked: 0
                 };
-                request("user", "POST", params, "解锁");
+                request("user/update", "POST", params, "解锁");
             });
         }
     });
@@ -114,7 +113,7 @@ layui.use(['table', "element", "jquery"], function(){
             email: "211887977@qq.com",
             phoneNumber: "17600902030"
         };
-        request("user", "POST", params, "添加")
+        request("user/save", "POST", params, "添加")
     });
 
     $("#del").on("click", function () {
@@ -127,15 +126,13 @@ layui.use(['table', "element", "jquery"], function(){
                 userIds.push(user.userId);
             });
             layer.confirm('真的删除行么', function(index){
-                var params = {_method: "DELETE", userIds:userIds};
-                request("users", "POST", params, "删除");
+                var params = {userIds:userIds};
+                request("user/batchDelete", "POST", params, "删除");
                 layer.close(index);
             });
         }
         // console.log(checkStatus.isAll ) //表格是否全选
     });
-
-    request("/users", "GET", {page:1, limit: 2}, "查拳");
 
     // 向后台发送请求，增删改查
     function request(url, method, params, msg) {
@@ -150,25 +147,106 @@ layui.use(['table', "element", "jquery"], function(){
             dataType:'json',
             data: params,
             success:function(data){
-                console.log(data)
-                if (data) {
-                    refresh();
-                    layer.msg(msg + "成功！");
-                } else {
-                    layer.msg(msg + "失败！")
+                if (data.code === 0) {
+                    if (data) {
+                        refresh();
+                        layer.msg(msg + "成功！");
+                    } else {
+                        layer.msg(msg + "失败！")
+                    }
+                } else if (data.code === 1001) {
+                    layer.msg(data.msg);
+                } else if (data.code === 1003) {
+                    layer.msg(data.msg + "," + msg + "失败！");
                 }
                 layer.closeAll('loading');
             },
             error(data) {
-                console.log(data)
                 layer.msg(msg + "失败！");
                 layer.closeAll('loading');
             }
         });
     }
+
+    // 添加更新配置弹窗
+    function layerAlert(options) {
+        var content = '<form style="margin-top: 20px;" class="layui-form">\n' +
+            '    <div class="layui-form-item">\n' +
+            '        <label class="layui-form-label">配置名称</label>\n' +
+            '        <div class="layui-input-inline">\n' +
+            '            <input type="text" id="config-name-add" value="' + options.name + '" class="layui-input">\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <div class="layui-form-item">\n' +
+            '        <label class="layui-form-label">配置值</label>\n' +
+            '        <div class="layui-input-inline">\n' +
+            '            <input type="text" id="config-value" value="' + options.value + '" class="layui-input">\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <div class="layui-form-item">\n' +
+            '        <label class="layui-form-label">描述</label>\n' +
+            '        <div class="layui-input-inline">\n' +
+            '            <input type="text" id="config-description" value="' + options.description + '" class="layui-input">\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '</form>';
+        layer.open({
+            type: 1, //此处以iframe举例
+            title: options.title,
+            area: ['380px', '280px'],
+            content: content,
+            btn: [options.btn, '关闭'],
+            yes: function(index){
+                var params = {
+                    _method: options._method,
+                    id: options.id,
+                    name: $("#config-name-add").val(),
+                    value: $("#config-value").val(),
+                    description: $("#config-description").val()
+                };
+                rportal.request(options.url, options.method, params, options.msg);
+                layer.close(index);
+            },
+            cancel: function(){}
+        });
+    }
 });
+</script>
+<script th:src="@{/lib/jquery-1.4.4.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.core.js}"></script>
+<script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.excheck.js}"></script>
+<script>
+    function loadPermissionTree(zNodes) {
+        var setting = {
+            check: {
+                enable: true,
+                chkboxType: { "Y": "ps", "N": "ps" }
+            },
+            view: {
+                showIcon: false
+            },
+            key: {
+                url: "_url"
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "permissionId",
+                    pIdKey: "parentId"
+                }
+            },
+            callback: {
+                onCheck: onCheck
+            }
+        };
 
+        $.fn.zTree.init($("#permission-tree"), setting, zNodes);
+    }
 
+    function onCheck(event, treeId, treeNode) {
+        var ztree = $.fn.zTree.getZTreeObj(treeId);
+        var checkedNodes = ztree.getCheckedNodes(true);
+    }
 </script>
 <script type="text/html" id="toolbar">
     {{#  if(d.locked == 1){ }}
