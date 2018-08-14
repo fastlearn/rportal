@@ -4,14 +4,15 @@
 layui.define(['jquery','layer'],function(exports){ //提示：模块也可以依赖其它模块，如：layui.define('layer', callback);
     var $= layui.jquery;
     var layer = layui.layer;
-    var table = layui.table;
+
     var obj = {
-        request: function (url, method, params, msg) {// 向后台发送请求，增删改查
-            //loading层
+        request: function (url, method, params, msg) {// 向后台发送请求
+            // loading层
             layer.msg(msg + '中', {
-                icon: 16
-                ,shade: 0.01
+                icon: 16,
+                shade: 0.01
             });
+
             $.ajax({
                 url:url,
                 type:method,
@@ -38,6 +39,7 @@ layui.define(['jquery','layer'],function(exports){ //提示：模块也可以依
             });
         }
     };
-    //输出rportal接口
+
+    // 输出rportal接口
     exports('rportal', obj);
 });

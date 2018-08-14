@@ -25,16 +25,13 @@
                     <table id="user" lay-size="sm" lay-filter="user"></table>
                 </div>
                 <div class="layui-tab-item">
-
                     <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
                         <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">删除</button>
                         <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="ready">标记已读</button>
                         <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="readyAll">全部已读</button>
                     </div>
-
                     <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
                 </div>
-
             </div>
         </div>
     </div>
@@ -44,6 +41,7 @@ var ctx = /*[[@{/}]]*/ "";
 layui.use(['table', "element", "jquery"], function(){
     var $ = layui.jquery;
     var table = layui.table;
+
     var cols = [
         {type:'checkbox'},
         {"field": "username", "title": "用户名", "width": 100},
@@ -55,18 +53,20 @@ layui.use(['table', "element", "jquery"], function(){
         /*{"field": "updateDatetime", "title": "更新日期"},*/
         {"field": "update", "title": "操作", "toolbar": '#toolbar'}
     ];
+
     var options = {
         elem: '#user',
         url: ctx + 'user/list',
-        where: {
+        where: { // 设定异步数据接口的额外参数
             username: $("#username").val()
-        }, //设定异步数据接口的额外参数
+        },
         page: {
             curr: 1,
             theme: '#1E9FFF'
         },
         cols: [cols]
     };
+
     var tableIns = table.render(options);
 
     table.on('tool(user)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -174,6 +174,7 @@ layui.use(['table', "element", "jquery"], function(){
 <script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.core.js}"></script>
 <script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.excheck.js}"></script>
 <script>
+
     function loadPermissionTree(zNodes) {
         var setting = {
             check: {
