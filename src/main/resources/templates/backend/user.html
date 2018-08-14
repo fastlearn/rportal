@@ -161,55 +161,13 @@ layui.use(['table', "element", "jquery"], function(){
                 }
                 layer.closeAll('loading');
             },
-            error(data) {
+            error() {
                 layer.msg(msg + "失败！");
                 layer.closeAll('loading');
             }
         });
     }
 
-    // 添加更新配置弹窗
-    function layerAlert(options) {
-        var content = '<form style="margin-top: 20px;" class="layui-form">\n' +
-            '    <div class="layui-form-item">\n' +
-            '        <label class="layui-form-label">配置名称</label>\n' +
-            '        <div class="layui-input-inline">\n' +
-            '            <input type="text" id="config-name-add" value="' + options.name + '" class="layui-input">\n' +
-            '        </div>\n' +
-            '    </div>\n' +
-            '    <div class="layui-form-item">\n' +
-            '        <label class="layui-form-label">配置值</label>\n' +
-            '        <div class="layui-input-inline">\n' +
-            '            <input type="text" id="config-value" value="' + options.value + '" class="layui-input">\n' +
-            '        </div>\n' +
-            '    </div>\n' +
-            '    <div class="layui-form-item">\n' +
-            '        <label class="layui-form-label">描述</label>\n' +
-            '        <div class="layui-input-inline">\n' +
-            '            <input type="text" id="config-description" value="' + options.description + '" class="layui-input">\n' +
-            '        </div>\n' +
-            '    </div>\n' +
-            '</form>';
-        layer.open({
-            type: 1, //此处以iframe举例
-            title: options.title,
-            area: ['380px', '280px'],
-            content: content,
-            btn: [options.btn, '关闭'],
-            yes: function(index){
-                var params = {
-                    _method: options._method,
-                    id: options.id,
-                    name: $("#config-name-add").val(),
-                    value: $("#config-value").val(),
-                    description: $("#config-description").val()
-                };
-                rportal.request(options.url, options.method, params, options.msg);
-                layer.close(index);
-            },
-            cancel: function(){}
-        });
-    }
 });
 </script>
 <script th:src="@{/lib/jquery-1.4.4.min.js}"></script>

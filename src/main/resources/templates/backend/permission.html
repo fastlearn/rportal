@@ -72,7 +72,7 @@ layui.use(['table', 'jquery', "element"], function(){
         //var tr = obj.tr; //获得当前行 tr 的DOM对象
 
         if(layEvent === 'detail'){ //查看
-            //do somehing
+            //do something
         } else if(layEvent === 'del'){ //删除
             layer.confirm('你确定删除资源[' + data.url + ']么', function(index){
                 request("permission/" + data.permissionId, "DELETE", {}, "删除");
@@ -137,11 +137,17 @@ layui.use(['table', 'jquery', "element"], function(){
             dataType:'json',
             data: params,
             success:function(data){
-                if (data) {
-                    refresh();
-                    layer.msg(msg + "成功！");
-                } else {
-                    layer.msg(msg + "失败！")
+                if (data.code === 0) {
+                    if (data) {
+                        refresh();
+                        layer.msg(msg + "成功！");
+                    } else {
+                        layer.msg(msg + "失败！")
+                    }
+                } else if (data.code === 1001) {
+                    layer.msg(data.msg);
+                } else if (data.code === 1003) {
+                    layer.msg(data.msg + "," + msg + "失败！");
                 }
                 layer.closeAll('loading');
             },

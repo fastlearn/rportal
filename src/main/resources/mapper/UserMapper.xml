@@ -9,7 +9,6 @@
       user_id userId,username,password,salt,locked,expired,
       name,sex,phone_number phoneNumber,email,
       create_datetime createDatetime,
-      update_datetime updateDatetime,
       password_update_datetime passwordUpdateDatetime
     </sql>
 
@@ -45,13 +44,13 @@
         insert into <include refid="table_name"/>
           (
             username,password,salt,locked,expired, name,sex,phone_number,email,
-            create_datetime,update_datetime,password_update_datetime
+            create_datetime,password_update_datetime
           )
         values
           (
             #{pojo.username}, #{pojo.password},#{pojo.salt},#{pojo.salt},#{pojo.expired},
             #{pojo.name},#{pojo.sex},#{pojo.phoneNumber},#{pojo.email},
-            #{pojo.createDatetime},#{pojo.updateDatetime},#{pojo.passwordUpdateDatetime}
+            #{pojo.createDatetime},#{pojo.passwordUpdateDatetime}
           )
     </delete>
 
