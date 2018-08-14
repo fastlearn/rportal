@@ -51,11 +51,7 @@ public class CustomPermissionsAuthorizationFilter extends PermissionsAuthorizati
         if ("XMLHttpRequest".equals(header)) { // 判断是否为ajax访问
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
-            if (!SecurityUtils.getSubject().isAuthenticated()) {// 判读收否认证
-                response.getWriter().write(JSON.toJSONString(new Result(1001, "未登录或登录已过期")));
-            } else {
-                response.getWriter().write(JSON.toJSONString(new Result(1003, "权限不足")));
-            }
+            response.getWriter().write(JSON.toJSONString(new Result(1003, "权限不足")));
         } else {
             return super.onAccessDenied(request, response);
         }

@@ -61,12 +61,6 @@ public class User implements Serializable{
     private LocalDateTime createDatetime;
 
     /**
-     * 用户更新日期
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateDatetime;
-
-    /**
      * 密码更新日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -170,14 +164,6 @@ public class User implements Serializable{
         this.createDatetime = createDatetime;
     }
 
-    public LocalDateTime getUpdateDatetime() {
-        return updateDatetime;
-    }
-
-    public void setUpdateDatetime(LocalDateTime updateDatetime) {
-        this.updateDatetime = updateDatetime;
-    }
-
     public LocalDateTime getPasswordUpdateDatetime() {
         return passwordUpdateDatetime;
     }
@@ -199,7 +185,6 @@ public class User implements Serializable{
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", createDatetime=" + createDatetime +
-                ", updateDatetime=" + updateDatetime +
                 ", passwordUpdateDatetime=" + passwordUpdateDatetime +
                 '}';
     }

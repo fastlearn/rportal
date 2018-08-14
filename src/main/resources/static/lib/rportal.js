@@ -18,10 +18,16 @@ layui.define(['jquery','layer'],function(exports){ //提示：模块也可以依
                 dataType:'json',
                 data: params,
                 success:function(data){
-                    if (data) {
-                        layer.msg(msg + "成功！");
-                    } else {
-                        layer.msg(msg + "失败！")
+                    if (data.code === 0) {
+                        if (data) {
+                            layer.msg(msg + "成功！");
+                        } else {
+                            layer.msg(msg + "失败！")
+                        }
+                    } else if (data.code === 1001) {
+                        layer.msg(data.msg);
+                    } else if (data.code === 1003) {
+                        layer.msg(data.msg + "," + msg + "失败！");
                     }
                     layer.closeAll('loading');
                 },

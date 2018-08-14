@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface PermissionMapper extends BaseMapper<Permission, Integer> {
 
+    List<Permission> listPermissionByFixed(boolean fixed);
+
     List<Permission> listPermission(@Param("pojo") Permission permission, @Param("page") Integer page, @Param("limit") Integer limit);
 
     int countPermission(@Param("pojo") Permission permission);

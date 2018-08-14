@@ -6,8 +6,15 @@
     <sql id="table_name">rportal_permission</sql>
 
     <select id="list" resultType="Permission">
-        select url,permission,fixed
+        select permission_id permissionId,parent_id parentId,url,permission,name,fixed
         from <include refid="table_name" />
+        order by sort
+    </select>
+
+    <select id="listPermissionByFixed" resultType="Permission">
+        select permission_id permissionId,parent_id parentId,name
+        from <include refid="table_name" />
+        where fixed = #{fixed}
         order by sort
     </select>
 
@@ -17,7 +24,7 @@
         from <include refid="table_name" />
         where 1=1 and fixed = #{pojo.fixed}
         <if test="pojo.name != null and pojo.name != ''">
-          and url like concat(#{pojo.name},'%')
+          and name like concat(#{pojo.name},'%')
         </if>
         order by sort
         limit #{page}, #{limit}
@@ -26,9 +33,9 @@
     <select id="countPermission" resultType="int">
         select count(*)
         from <include refid="table_name" />
-        where 1=1
+        where 1=1 and fixed = #{pojo.fixed}
         <if test="pojo.name != null and pojo.name != ''">
-          and url = #{pojo.name}
+          and name = #{pojo.name}
         </if>
     </select>
 
@@ -36,7 +43,7 @@
         insert into <include refid="table_name" />
           (parent_id,url,name,parent_name,description,sort)
         values
-          (#{pojo.parentId},#{pojo.url},,#{pojo.name},#{pojo.parentName},#{pojo.description},#{pojo.sort})
+          (#{pojo.parentId},#{pojo.url},#{pojo.name},#{pojo.parentName},#{pojo.description},#{pojo.sort})
     </insert>
 
     <delete id="delete">

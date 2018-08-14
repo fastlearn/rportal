@@ -69,8 +69,8 @@ public class UserServiceImpl implements UserService {
         LocalDateTime localDateTime = LocalDateTime.now();
         user.setExpired(expired);
         user.setCreateDatetime(localDateTime);
-        user.setUpdateDatetime(localDateTime);
         user.setPasswordUpdateDatetime(localDateTime);
+        
         return userMapper.save(user);
     }
 

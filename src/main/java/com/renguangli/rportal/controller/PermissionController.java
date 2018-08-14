@@ -20,9 +20,9 @@ public class PermissionController {
     @Resource
     private PermissionService permissionService;
 
-    @GetMapping("/permission/listAll")
-    public Result permissionListAll(Permission permission, Integer page, Integer limit) {
-        List<Permission> data = permissionService.listPermission();
+    @GetMapping("/permission/list")
+    public Result permissionList() {
+        List<Permission> data = permissionService.listPermissionByFixed(false);
         return new Result(0, data);
     }
 

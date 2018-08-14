@@ -14,6 +14,8 @@ public interface PermissionService {
 
     List<Permission> listPermission();
 
+    List<Permission> listPermissionByFixed(boolean fixed);
+
     List<Permission> listPermission(Permission permission, Integer page, Integer limit);
 
     int countPermission(Permission permission);

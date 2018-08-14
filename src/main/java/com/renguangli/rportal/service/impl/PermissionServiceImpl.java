@@ -6,6 +6,7 @@ import com.renguangli.rportal.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -27,6 +28,11 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<Permission> listPermission() {
         return permissionMapper.list();
+    }
+
+    @Override
+    public List<Permission> listPermissionByFixed(boolean fixed) {
+        return permissionMapper.listPermissionByFixed(fixed);
     }
 
     @Override
