@@ -4,6 +4,9 @@
 <head>
     <title>角色管理</title>
     <link rel="stylesheet" th:href="@{/lib/extend/ztree/css/zTreeStyle/zTreeStyle.css}" media="all">
+    <script th:src="@{/lib/jquery-1.4.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.core.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.excheck.js}"></script>
 </head>
 <body>
 <div class="layui-fluid">
@@ -95,7 +98,10 @@
                     };
                     request("role/delete", "POST", params, "删除");
                 });
+            } else if(layEvent === 'authority'){ //锁定
+                layerAlert(data.roleId);
             }
+
         });
 
         $("#query").click(function () {
@@ -169,6 +175,54 @@
             });
         }
 
+        // 添加更新配置弹窗
+        function layerAlert(roleId) {
+            layer.open({
+                type: 2, //此处以iframe举例
+                title: '角色赋权',
+                area: ['800px', '450px'],
+                content: ctx + "pageView/authority",
+                btn: ['保存', '关闭'],
+                yes: function(index){
+                    var window = $("iframe")[0].contentWindow;
+                    var checkedNodes = window.getCheckedNodes();
+                    var rolePermissions = [];
+                    $.each(checkedNodes, function (i, checkedNode) {
+                        var obj = {"roleId": roleId, "permissionId": checkedNode.permissionId};
+                        rolePermissions.push(obj);
+                    });
+                    console.log(rolePermissions);
+                    var msg = "赋权";
+                    $.ajax({
+                        url:ctx + "role/authority",
+                        type:"POST",
+                        dataType:'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(rolePermissions),
+                        success:function(data){
+                            layer.close(index);
+                            if (data.code === 0) {
+                                if (data) {
+                                    layer.msg(msg + "成功！");
+                                } else {
+                                    layer.msg(msg + "失败！")
+                                }
+                            } else if (data.code === 1001) {
+                                layer.msg(data.msg);
+                            } else if (data.code === 1003) {
+                                layer.msg(data.msg + "," + msg + "失败！");
+                            }
+                            layer.closeAll('loading');
+                        },
+                        error() {
+                            layer.msg(msg + "失败！");
+                            layer.closeAll('loading');
+                        }
+                    });
+                },
+                cancel: function(){}
+            });
+        }
     });
 </script>
 <script th:src="@{/lib/jquery-1.4.4.min.js}"></script>

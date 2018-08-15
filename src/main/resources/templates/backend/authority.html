@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>授权</title>
+    <link rel="stylesheet" th:href="@{/lib/extend/ztree/css/zTreeStyle/zTreeStyle.css}" media="all">
+    <script th:src="@{/lib/jquery-1.4.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.core.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/extend/ztree/js/jquery.ztree.excheck.js}"></script>
+</head>
+<body>
+<!-- 权限树 -->
+<div class="layui-tab-item">
+    <ul id="permission-tree" class="ztree"></ul>
+</div>
+<script th:inline="javascript">
+    var ctx = /*[[@{/}]]*/ "";
+    request();
+    function request() {
+        $.ajax({
+            url:ctx + "permission/list",
+            type:"GET",
+            dataType:'json',
+            data: {},
+            success:function(data){
+                loadPermissionTree(data.data);
+            },
+            error() {}
+        });
+    }
+
+    function loadPermissionTree(zNodes) {
+        var setting = {
+            check: {
+                enable: true,
+                chkboxType: { "Y": "ps", "N": "ps" }
+            },
+            view: {
+                showIcon: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "permissionId",
+                    pIdKey: "parentId"
+                }
+            }
+        };
+
+        $.fn.zTree.init($("#permission-tree"), setting, zNodes);
+    }
+
+    function getCheckedNodes() {
+        var ztree = $.fn.zTree.getZTreeObj("permission-tree");
+        return ztree.getCheckedNodes(true);
+    }
+</script>
+</body>
+</html>

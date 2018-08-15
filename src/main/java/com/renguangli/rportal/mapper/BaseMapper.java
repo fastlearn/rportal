@@ -18,6 +18,8 @@ public interface BaseMapper<T, ID extends Serializable> {
 
     boolean save(@Param("pojo") T t);
 
+    boolean batchSave(@Param("pojos") List<T> t);
+
     boolean delete(@Param("id")ID id);
 
     boolean batchDelete(@Param("ids") ID[] ids);

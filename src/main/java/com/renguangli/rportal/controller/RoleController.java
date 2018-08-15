@@ -2,6 +2,8 @@ package com.renguangli.rportal.controller;
 
 import com.renguangli.rportal.pojo.Result;
 import com.renguangli.rportal.pojo.Role;
+import com.renguangli.rportal.pojo.RolePermission;
+import com.renguangli.rportal.service.RolePermissionService;
 import com.renguangli.rportal.service.RoleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,9 @@ public class RoleController {
 
     @Resource
     private RoleService roleService;
+
+    @Resource
+    private RolePermissionService rolePermissionService;
 
     @GetMapping("/list")
     public Result listRole(Role role, int page, int limit) {
@@ -50,6 +55,12 @@ public class RoleController {
     @PostMapping("/update")
     public Result updateRole(Role role) {
         boolean flag = roleService.updateRole(role);
+        return new Result(0, flag);
+    }
+
+    @PostMapping("/authority")
+    public Result authority(@RequestBody List<RolePermission> rolePermissions) {
+        boolean flag = rolePermissionService.batchSave(rolePermissions);
         return new Result(0, flag);
     }
 

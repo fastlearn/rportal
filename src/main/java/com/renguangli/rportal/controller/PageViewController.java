@@ -1,6 +1,5 @@
 package com.renguangli.rportal.controller;
 
-import com.renguangli.rportal.pojo.Config;
 import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.service.ConfigService;
 import com.renguangli.rportal.service.UserService;
@@ -60,16 +59,18 @@ public class PageViewController {
 
     private String getView(String pageName) {
         if (pageViews.isEmpty()) {
-            //系统配置页面
+            // 系统配置页面
             pageViews.put("config", "backend/config");
-            //dashboard页面
+            // dashboard页面
             pageViews.put("dashboard", "backend/dashboard");
-            //用户管理页面
+            // 用户管理页面
             pageViews.put("user", "backend/user");
-            //角色管理页面
+            // 角色管理页面
             pageViews.put("role", "backend/role");
-            //权限管理页面
+            // 权限管理页面
             pageViews.put("permission", "backend/permission");
+            // 授权页面
+            pageViews.put("authority", "backend/authority");
         }
         return pageViews.get(pageName);
     }
