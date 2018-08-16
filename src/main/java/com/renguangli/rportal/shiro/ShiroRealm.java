@@ -32,7 +32,9 @@ public class ShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         Set<String> roles = userService.listRole(username);
         authorizationInfo.setRoles(roles);
-        authorizationInfo.setStringPermissions(userService.listPermissionByRoles(roles));
+        if (roles != null && !roles.isEmpty()) {
+            authorizationInfo.setStringPermissions(userService.listPermissionByRoles(roles));
+        }
         userService.listPermissionByUsername(username).forEach(authorizationInfo::addStringPermission);
         return authorizationInfo;
     }
