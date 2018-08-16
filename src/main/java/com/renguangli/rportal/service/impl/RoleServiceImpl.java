@@ -1,12 +1,16 @@
 package com.renguangli.rportal.service.impl;
 
 import com.renguangli.rportal.mapper.RoleMapper;
+import com.renguangli.rportal.mapper.RolePermissionMapper;
 import com.renguangli.rportal.pojo.Role;
+import com.renguangli.rportal.service.RolePermissionService;
 import com.renguangli.rportal.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -20,9 +24,12 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleMapper roleMapper;
 
+    private final RolePermissionMapper rolePermissionMapper;
+
     @Autowired
-    public RoleServiceImpl(RoleMapper roleMapper) {
+    public RoleServiceImpl(RoleMapper roleMapper, RolePermissionMapper rolePermissionMapper) {
         this.roleMapper = roleMapper;
+        this.rolePermissionMapper = rolePermissionMapper;
     }
 
     @Override
@@ -39,19 +46,28 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public boolean saveRole(Role role) {
+        role.setCreateDatetime(LocalDateTime.now());
         return roleMapper.save(role);
     }
 
     @Override
     @Transactional
     public boolean deleteRole(Integer roleId) {
-        return roleMapper.delete(roleId);
+        boolean flag = roleMapper.delete(roleId);
+        if (flag) {
+            rolePermissionMapper.deleteByRoleId(roleId);
+        }
+        return flag;
     }
 
     @Override
     @Transactional
     public boolean batchDeleteRole(Integer[] roleIds) {
-        return roleMapper.batchDelete(roleIds);
+        boolean flag = roleMapper.batchDelete(roleIds);
+        if (flag) {
+            rolePermissionMapper.batchDeleteByRoleIds(roleIds);
+        }
+        return flag;
     }
 
     @Override

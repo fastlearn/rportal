@@ -97,7 +97,8 @@
         from <include refid="table_name" /> u
           left join rportal_user_role ur on ur.user_id = u.user_id
           left join rportal_role r on r.role_id = ur.role_id
-        where u.username = #{username}
+        where  r.disabled = 0
+        and u.username = #{username}
     </select>
 
     <select id="listPermissionByUsername" resultType="String">

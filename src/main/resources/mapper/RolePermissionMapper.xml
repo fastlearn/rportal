@@ -3,23 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.renguangli.rportal.mapper.RolePermissionMapper">
 
-    <select id="listRole" resultType="Role">
-        select role_id roleId,role,name,description,disabled
-        from rportal_role
-        where 1=1
-        <if test="pojo.name != null and pojo.name != ''">
-            and name like concat(#{pojo.name},'%')
-        </if>
-        limit #{page},#{limit}
-    </select>
-
-    <select id="countRole" resultType="int">
-        select count(*)
-        from rportal_role
-        where 1=1
-        <if test="pojo.name != null and pojo.name != ''">
-            and name like concat(#{pojo.name},'%')
-        </if>
+    <select id="listByRoleId" resultType="RolePermission">
+        select id,role_id roleId,permission_id permissionId
+        from rportal_role_permission
+        where role_id = #{roleId}
     </select>
     
     <insert id="batchSave">
@@ -36,4 +23,11 @@
         where role_id = #{roleId}
     </delete>
 
+    <delete id="batchDeleteByRoleIds">
+        delete from rportal_role_permission
+        where role_id in
+        <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
 </mapper>

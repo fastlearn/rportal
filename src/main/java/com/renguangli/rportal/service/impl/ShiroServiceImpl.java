@@ -1,5 +1,6 @@
 package com.renguangli.rportal.service.impl;
 
+import com.renguangli.rportal.mapper.PermissionMapper;
 import com.renguangli.rportal.pojo.Permission;
 import com.renguangli.rportal.service.PermissionService;
 import com.renguangli.rportal.service.ShiroService;
@@ -7,6 +8,7 @@ import com.renguangli.rportal.util.WebUtils;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,8 +25,12 @@ import java.util.Map;
 @Service("shiroService")
 public class ShiroServiceImpl implements ShiroService {
 
-    @Resource
-    private PermissionService permissionService;
+    private final PermissionMapper permissionMapper;
+
+    @Autowired
+    public ShiroServiceImpl(PermissionMapper permissionMapper) {
+        this.permissionMapper = permissionMapper;
+    }
 
     public synchronized void updateFilterChainDefinitionMap() {
         AbstractShiroFilter shiroFilter = WebUtils.getApplicationContext().getBean("shiroFilter", AbstractShiroFilter.class);
@@ -42,13 +48,12 @@ public class ShiroServiceImpl implements ShiroService {
     public Map<String,String> getFilterChainDefinitionMap(){
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 从数据库获取url权限配置
-        List<Permission> permissions = permissionService.listPermission();
+        List<Permission> permissions = permissionMapper.list();
         permissions.forEach(permission -> {
             String perm = permission.getPermission();
             if (!permission.isFixed()) {
                 perm = "perms[" + perm + "]";
             }
-            System.out.println(permission.getUrl() + "=" + perm);
             filterChainDefinitionMap.put(permission.getUrl(), perm);
         });
 

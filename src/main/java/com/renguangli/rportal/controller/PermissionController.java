@@ -6,6 +6,7 @@ import com.renguangli.rportal.service.PermissionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,8 +23,8 @@ public class PermissionController {
 
     @GetMapping("/permission/list")
     public Result permissionList() {
-        List<Permission> data = permissionService.listPermissionByFixed(false);
-        return new Result(0, data);
+        List<Permission> permissions = permissionService.listPermissionByFixed(false);
+        return new Result(0, permissions);
     }
 
     @GetMapping("/permissions")

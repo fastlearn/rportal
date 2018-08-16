@@ -1,6 +1,9 @@
 package com.renguangli.rportal.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Role
@@ -22,11 +25,10 @@ public class Role implements Serializable{
 
     private boolean disabled;
 
-    public Role() {}
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createDatetime;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
+    public Role() {}
 
     public Integer getRoleId() {
         return roleId;
@@ -68,6 +70,14 @@ public class Role implements Serializable{
         this.disabled = disabled;
     }
 
+    public LocalDateTime getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(LocalDateTime createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
     @Override
     public String toString() {
         return "Role{" +
@@ -76,6 +86,7 @@ public class Role implements Serializable{
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", disabled=" + disabled +
+                ", createDatetime=" + createDatetime +
                 '}';
     }
 }

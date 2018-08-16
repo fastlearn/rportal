@@ -51,4 +51,12 @@ public class RportalApplicationTests {
 		}
 		return  sb.toString();
 
-	}}
+	}
+
+	@Test
+	public void test1() {
+        String str = "/hello/1.0/hello?count=1";
+        System.out.println(str.substring(str.lastIndexOf('=') + 1, str.length()));
+    }
+
+}

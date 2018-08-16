@@ -4,7 +4,7 @@
 <mapper namespace="com.renguangli.rportal.mapper.RoleMapper">
 
     <select id="listRole" resultType="Role">
-        select role_id roleId,role,name,description,disabled
+        select role_id roleId,role,name,description,disabled,create_datetime createDatetime
         from rportal_role
         where 1=1
         <if test="pojo.name != null and pojo.name != ''">
@@ -24,9 +24,9 @@
     
     <insert id="save">
         insert into rportal.rportal_role
-          (role, name, description, disabled)
+          (role, name, description, disabled,create_datetime)
         values
-          (#{pojo.role},#{pojo.name},#{pojo.description},#{pojo.disabled})
+          (#{pojo.role},#{pojo.name},#{pojo.description},#{pojo.disabled},#{pojo.createDatetime})
     </insert>
 
     <delete id="delete">

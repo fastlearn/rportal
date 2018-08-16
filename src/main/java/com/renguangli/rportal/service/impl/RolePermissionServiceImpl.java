@@ -20,9 +20,25 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
+    public List<RolePermission> listByRoleId(Integer roleId) {
+        return rolePermissionMapper.listByRoleId(roleId);
+    }
+
+    @Override
     @Transactional
     public boolean batchSave(List<RolePermission> rolePermissions) {
-        return rolePermissionMapper.deleteByRoleId(rolePermissions.get(0).getRoleId())
-                && rolePermissionMapper.batchSave(rolePermissions);
+        Integer roleId = rolePermissions.get(0).getRoleId();
+        rolePermissionMapper.deleteByRoleId(roleId);
+        return rolePermissionMapper.batchSave(rolePermissions);
+    }
+
+    @Override
+    public boolean deleteByRoleId(Integer roleId) {
+        return rolePermissionMapper.deleteByRoleId(roleId);
+    }
+
+    @Override
+    public boolean batchDeleteByRoleIds(Integer[] roleIds) {
+        return rolePermissionMapper.batchDeleteByRoleIds(roleIds);
     }
 }

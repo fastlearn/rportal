@@ -161,8 +161,7 @@ layui.use(['table', 'jquery', "element"], function(){
 
 </script>
 <script>
-
-    function request() {
+    $(function () {
         $.ajax({
             url:ctx + "permission/list",
             type:"GET",
@@ -173,7 +172,7 @@ layui.use(['table', 'jquery', "element"], function(){
             },
             error() {}
         });
-    }
+    });
 
     function loadPermissionTree(zNodes) {
         var setting = {

@@ -35,7 +35,6 @@ public class RoleController {
 
     @PostMapping("/save")
     public Result saveRole(Role role) {
-        System.out.println(role);
         boolean flag = roleService.saveRole(role);
         return new Result(0, flag);
     }
@@ -58,8 +57,11 @@ public class RoleController {
         return new Result(0, flag);
     }
 
-    @PostMapping("/authority")
-    public Result authority(@RequestBody List<RolePermission> rolePermissions) {
+    @PostMapping("/authority/{roleId}")
+    public Result authority(@PathVariable("roleId") Integer roleId, @RequestBody List<RolePermission> rolePermissions) {
+        if (rolePermissions.size() == 0) {
+            return new Result(0, rolePermissionService.deleteByRoleId(roleId));
+        }
         boolean flag = rolePermissionService.batchSave(rolePermissions);
         return new Result(0, flag);
     }

@@ -3,6 +3,8 @@ package com.renguangli.rportal.mapper;
 import com.renguangli.rportal.pojo.RolePermission;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * RoleMapper
  *
@@ -11,6 +13,13 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface RolePermissionMapper extends BaseMapper<RolePermission, Integer> {
 
+    List<RolePermission> listByRoleId(@Param("roleId") Integer roleId);
+
     boolean deleteByRoleId(@Param("roleId") Integer roleId);
+
+    /**
+     * 数组roleIds元素要大于0
+     */
+    boolean batchDeleteByRoleIds(@Param("roleIds") Integer[] roleIds);
 
 }

@@ -1,5 +1,6 @@
 package com.renguangli.rportal.service.impl;
 
+import com.renguangli.rportal.mapper.ConfigMapper;
 import com.renguangli.rportal.mapper.UserMapper;
 import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.service.ConfigService;
@@ -25,12 +26,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    @Resource
-    private ConfigService configService;
+    private final ConfigMapper configMapper;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper) {
+    public UserServiceImpl(UserMapper userMapper, ConfigMapper configMapper) {
         this.userMapper = userMapper;
+        this.configMapper = configMapper;
     }
 
     @Override
@@ -63,14 +64,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public boolean saveUser(User user) {
         //从配置表中获取密码过期时间
-        String passwordExpired = configService.getConfig("passwordExpired");
+        String passwordExpired = configMapper.getConfig("passwordExpired");
         int expired = Integer.parseInt(passwordExpired);
         //设置密码过期时间
         LocalDateTime localDateTime = LocalDateTime.now();
         user.setExpired(expired);
         user.setCreateDatetime(localDateTime);
         user.setPasswordUpdateDatetime(localDateTime);
-        
         return userMapper.save(user);
     }
 

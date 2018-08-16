@@ -1,7 +1,9 @@
 package com.renguangli.rportal.controller;
 
+import com.renguangli.rportal.pojo.RolePermission;
 import com.renguangli.rportal.pojo.User;
 import com.renguangli.rportal.service.ConfigService;
+import com.renguangli.rportal.service.RolePermissionService;
 import com.renguangli.rportal.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,6 +33,9 @@ public class PageViewController {
     @Resource
     private ConfigService configService;
 
+    @Resource
+    private RolePermissionService rolePermissionService;
+
     @GetMapping("")
     public String enterFrontend() {
         return "index";
@@ -41,7 +47,7 @@ public class PageViewController {
             return "error/403";
         }
         User user = userService.getUser(new User(username));
-        return user == null ? "error/404" : "backend/index";
+        return user == null ? "error/404" : "index";
     }
 
     @GetMapping("/pageView")
@@ -57,6 +63,15 @@ public class PageViewController {
         return view == null ? "error/404" : view;
     }
 
+    @GetMapping("/pageView/authority")
+    public String enterBackendAuthority(Integer userId, Integer roleId, Model model) {
+        List<RolePermission> rolePermissions = rolePermissionService.listByRoleId(roleId);
+        if (rolePermissions != null) {
+            model.addAttribute("rolePermissions", rolePermissions);
+        }
+        return "backend/authority";
+    }
+
     private String getView(String pageName) {
         if (pageViews.isEmpty()) {
             // 系统配置页面
@@ -69,8 +84,6 @@ public class PageViewController {
             pageViews.put("role", "backend/role");
             // 权限管理页面
             pageViews.put("permission", "backend/permission");
-            // 授权页面
-            pageViews.put("authority", "backend/authority");
         }
         return pageViews.get(pageName);
     }

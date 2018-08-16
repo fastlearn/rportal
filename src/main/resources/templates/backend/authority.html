@@ -14,19 +14,29 @@
 </div>
 <script th:inline="javascript">
     var ctx = /*[[@{/}]]*/ "";
-    request();
-    function request() {
+    var rolePermissions = /*[[${rolePermissions}]]*/ [];
+    console.log(rolePermissions);
+    $(function () {
         $.ajax({
             url:ctx + "permission/list",
             type:"GET",
             dataType:'json',
             data: {},
             success:function(data){
+                if (rolePermissions.length !== 0) {
+                    $.each(data.data, function (i, node) {
+                        $.each(rolePermissions, function (j, rolePermission) {
+                            if (node.permissionId === rolePermission.permissionId) {
+                                node.checked = true;
+                            }
+                        });
+                    });
+                }
+                console.log(data.data);
                 loadPermissionTree(data.data);
-            },
-            error() {}
+            }
         });
-    }
+    });
 
     function loadPermissionTree(zNodes) {
         var setting = {
