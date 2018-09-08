@@ -7,8 +7,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
- * RportalApplication
- * spring-boot start class
+ *
+ * spring-boot start class RportalApplication
  *
  * @author renguangli 2018/8/2 13:25
  * @since JDK 1.8

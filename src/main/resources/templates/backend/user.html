@@ -92,6 +92,16 @@ layui.use(['table', "element", "jquery"], function(){
                 };
                 request("user/update", "POST", params, "解锁");
             });
+        } else if(layEvent === 'unlock'){ //锁定
+            layer.confirm('你确定要解锁用户[' + obj.data.username + ']么', function(index){
+                var params = {
+                    userId: data.userId,
+                    locked: 0
+                };
+                request("user/update", "POST", params, "解锁");
+            });
+        } else if(layEvent === 'assignRoles'){ //锁定
+            layer.msg('角色分配');
         }
     });
 
@@ -213,7 +223,7 @@ layui.use(['table', "element", "jquery"], function(){
     {{#  } else { }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="lock">锁定</a>
     {{#  } }}
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="authority">赋权</a>
+    <a class="layui-btn layui-btn-xs" lay-event="assignRoles">角色分配</a>
 </script>
 </body>
 </html>

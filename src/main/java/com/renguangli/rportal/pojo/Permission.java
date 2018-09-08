@@ -22,7 +22,7 @@ public class Permission {
 
     private String description;
 
-    boolean fixed;
+    private boolean fixed;
 
     private Integer sort;
 
